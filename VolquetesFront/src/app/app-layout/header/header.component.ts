@@ -23,13 +23,15 @@ export class HeaderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (localStorage.getItem('token') != null) {
+    const token = localStorage.getItem('token');
+    if (token) {
       this.userService.checkToken().subscribe(
         (response: any) => {
-          this.router.navigate(['/cafe/dashboard']);
+          this.router.navigate(['/']);
         },
         (error: any) => {
-          console.log(error);
+          console.error('TOken check failed:', error);
+          // Aquí hay que redirigir al login cuando lo tengamos armado
         }
       );
     }

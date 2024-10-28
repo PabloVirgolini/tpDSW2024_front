@@ -88,6 +88,9 @@ export class UsuariosService {
   }
 
   checkToken() {
-    return this.httpClient.get(this.url + '/user/checkToken');
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+      return this.httpClient.get(`${this.url}/user/checkToken`, { headers });
+
   }
 }
