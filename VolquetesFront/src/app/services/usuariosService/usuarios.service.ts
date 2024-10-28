@@ -1,13 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, catchError, of, tap, map } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Usuario, UsuarioModel } from '../../model/interfaces/usuario.interface.js';
+import { environment } from '../../../environments/environment.js';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class UsuariosService {
+  url = environment.apiUrl;
+  
   private usuariosSubject = new BehaviorSubject<Usuario[]>([]);
   public usuario$: Observable<Usuario[]> = this.usuariosSubject.asObservable();
 
@@ -15,7 +18,7 @@ export class UsuariosService {
 
   private http = inject(HttpClient); // Use inject() to get HttpClient
 
-  constructor() {
+  constructor(private httpClient: HttpClient) {
     this.loadInitialData();
   }
 
@@ -76,5 +79,15 @@ export class UsuariosService {
     this.getAll().subscribe((auxUser) => {
       this.usuariosSubject.next(auxUser);
     });
+  }
+
+  login(data: any) {
+    return this.httpClient.post(this.url + '/user/login/', data, {
+      headers: new HttpHeaders().set('Content-Type', 'application/json'),
+    });
+  }
+
+  checkToken() {
+    return this.httpClient.get(this.url + '/user/checkToken');
   }
 }
