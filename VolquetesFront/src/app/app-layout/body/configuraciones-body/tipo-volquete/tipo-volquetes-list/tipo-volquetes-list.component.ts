@@ -19,11 +19,11 @@ import { TiposVolqueteBodyService } from '../tipos-volquete-body.service.js';
 export class TipoVolquetesListComponent implements OnInit, OnDestroy {
   tipos: TipoVolqueteModel[] = [];
   displayedColumns: string[] = [
-    'id_tipo_volquete',
+    'id',
     'descripcion_tipo_volquete',
   ];
   columnNames: { [key: string]: string } = {
-    id_tipo_volquete: 'ID',
+    id: 'ID',
     descripcion_tipo_volquete: 'Descripción',
   };
 
@@ -31,7 +31,7 @@ export class TipoVolquetesListComponent implements OnInit, OnDestroy {
   deletingRow: TipoVolqueteModel | null = null;
   editingRow: TipoVolqueteModel | null = null;
   editTemp: TipoVolqueteModel = {
-    id_tipo_volquete: 0,
+    id: 0,
     descripcion_tipo_volquete: '',
   };
 
@@ -74,7 +74,7 @@ export class TipoVolquetesListComponent implements OnInit, OnDestroy {
 
     this.subscription.add(
       this.tiposVolqueteService
-        .delete(this.deletingRow.id_tipo_volquete)
+        .delete(this.deletingRow.id)
         .subscribe({
           next: () => {
             this.loadTiposVolquete(); // Refresh the list
@@ -134,7 +134,7 @@ export class TipoVolquetesListComponent implements OnInit, OnDestroy {
         next: (maxTipoVolquete: TipoVolqueteModel) => {
           // Crear un nuevo objeto basado en el maximo ID encontrado
           const newTipo: TipoVolqueteModel = {
-            id_tipo_volquete: maxTipoVolquete.id_tipo_volquete+1,
+            id: maxTipoVolquete.id+1,
             descripcion_tipo_volquete: '',
           };
           // Agregar el nuevo objeto al array de tipos

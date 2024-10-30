@@ -32,7 +32,7 @@
             <input *ngIf="editingRow === volquete" [(ngModel)]="editTemp!.fecha_compra" />
             <span *ngIf="editingRow !== volquete">{{ volquete.fecha_compra | date: 'dd/MM/yyyy'}}</span>
           </td>
-          
+
           <td>
             <button *ngIf="editingRow === volquete" (click)="saveEdit()">Guardar</button>
             <button *ngIf="editingRow === volquete" (click)="cancelEdit()">Cancelar</button>

@@ -18,8 +18,8 @@
         <tr *ngFor="let tipo of tipos" (click)="onSeleccionarTipo(tipo)">
 
           <td>
-            
-            <span>{{ tipo.id_tipo_volquete }}</span>
+
+            <span>{{ tipo.id }}</span>
           </td>
           <td>
             <input *ngIf="editingRow === tipo" [(ngModel)]="editTemp.descripcion_tipo_volquete" />
@@ -31,7 +31,7 @@
             <button *ngIf="editingRow !== tipo" (click)="startEdit(tipo)">Editar</button>
             <button *ngIf="editingRow !== tipo" (click)="delete(tipo)">Eliminar</button>
           </td>
-          
+
         </tr>
 
         <tr>

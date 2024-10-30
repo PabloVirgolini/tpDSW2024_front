@@ -8,24 +8,24 @@ import { TipoVolquete, TipoVolqueteModel } from '../../model/interfaces/tipo_vol
 })
 
 export class TiposVolqueteService {
-  
+
   private tiposVolqueteSubject = new BehaviorSubject<TipoVolquete[]>([]);
   public tiposVolquete$ : Observable<TipoVolquete[]> = this.tiposVolqueteSubject.asObservable();
-  
+
   private apiUrl = 'http://localhost:3000/api/tipoVolquetes';
-  
+
   private http = inject(HttpClient); // Use inject() to get HttpClient
-  
+
   // tiposVolquete: TipoVolquete[]=[];
-  
+
   constructor() {
     this.loadInitialData();
   }
-  
+
   private loadInitialData() {
     this.getAll().subscribe(tiposVolquete => this.tiposVolqueteSubject.next(tiposVolquete));
   }
-  
+
 getAll(): Observable<TipoVolquete[]> {
   console.log('getAll called')
   return this.http
@@ -45,7 +45,7 @@ getMaxId(): Observable<TipoVolquete>{
         }
 
         const maxTipoVolquete = tipos.reduce((prev,current)=>
-          prev.id_tipo_volquete > current.id_tipo_volquete ? prev:current );
+          prev.id > current.id ? prev:current );
         return maxTipoVolquete;
     }),
     catchError(this.handleError<TipoVolquete>('getMaxId'))
@@ -69,7 +69,7 @@ add(tipo: TipoVolquete): Observable<TipoVolquete> {
 }
 
 update(tipoVolquete: TipoVolqueteModel): Observable<TipoVolqueteModel> {
-  const id = tipoVolquete.id_tipo_volquete;
+  const id = tipoVolquete.id;
   if (!id || isNaN(id)) {
     throw new Error("ID inválido para la actualización del tipo de volquete");
   }

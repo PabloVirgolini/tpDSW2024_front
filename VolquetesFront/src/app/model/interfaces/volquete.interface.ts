@@ -22,7 +22,7 @@ export class VolqueteModel implements Volquete {
     fecha_compra: Date = new Date(),
     fecha_fabricacion: Date = new Date(),
     marca: string = '',
-    tipo_volquete: TipoVolquete = { id_tipo_volquete: 0, descripcion_tipo_volquete: '' }
+    tipo_volquete: TipoVolquete = { id: 0, descripcion_tipo_volquete: '' }
   ) {
     this.nro_volquete = nro_volquete;
     this.tipo_volquete = tipo_volquete;

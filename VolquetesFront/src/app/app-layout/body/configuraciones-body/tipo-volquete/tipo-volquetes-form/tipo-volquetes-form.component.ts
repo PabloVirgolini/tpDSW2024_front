@@ -23,9 +23,9 @@ export class TipoVolqueteFormComponent implements OnInit {
 
   tipoVolquete: TipoVolqueteModel;
   tiposVolquetes: TipoVolqueteModel[]=[];
-  
+
   displayedColumns: string[]=['id_tipo_volquete','descripcion_tipo_volquete'];
-  
+
   introducido = -1;
   mensajeErr = '';
 
@@ -50,7 +50,7 @@ export class TipoVolqueteFormComponent implements OnInit {
       (resp) => {
         this.mensajeErr = '';
         this.introducido = 1;
-        this.tipoVolquete.id_tipo_volquete = 0;
+        this.tipoVolquete.id = 0;
         this.tipoVolquete.descripcion_tipo_volquete = '';
       },
       (error) => {
@@ -70,10 +70,10 @@ export class TipoVolqueteFormComponent implements OnInit {
 
 insertar(): void{
   const newTipoVolquete: TipoVolqueteModel = {
-    id_tipo_volquete: Number(this.tipoVolqueteForm.value.id ?? 0), // or generate a new ID
+    id: Number(this.tipoVolqueteForm.value.id ?? 0), // or generate a new ID
     descripcion_tipo_volquete: this.tipoVolqueteForm.value.descripcion ?? '',
   };
-  
+
   this._datos.introducirTipoVolquete(newTipoVolquete).subscribe((tipoVolquete)=>{
     console.log('Tipo agregado:' , tipoVolquete);
     this.resetForm();
