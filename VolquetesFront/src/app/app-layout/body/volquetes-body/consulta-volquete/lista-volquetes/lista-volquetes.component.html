@@ -18,16 +18,20 @@
         <tr *ngFor="let volquete of volquetes" (click)="onSeleccionarTipo(volquete)">
 
           <td>
-            <span>{{ volquete.nro_volquete }}</span>
+            <span>{{ volquete.id }}</span>
           </td>
           <td>
-            <input *ngIf="editingRow === volquete" [(ngModel)]="editTemp!.tipo_volquete.descripcion_tipo_volquete" />
-            <span *ngIf="editingRow !== volquete">{{ volquete.tipo_volquete.descripcion_tipo_volquete }}</span>
+            <ng-container *ngIf="editingRow === volquete">
+              <!-- Verifica que editTemp y tipo_volquete están definidos -->
+              <input *ngIf="editTemp && editTemp.TipoVolquete" [(ngModel)]="editTemp.TipoVolquete.descripcion_tipo_volquete" />
+            </ng-container>
+            <span *ngIf="editingRow !== volquete">{{ volquete.TipoVolquete.descripcion_tipo_volquete }}</span>
           </td>
           <td>
             <input *ngIf="editingRow === volquete" [(ngModel)]="editTemp!.marca" />
             <span *ngIf="editingRow !== volquete">{{ volquete.marca }}</span>
           </td>
+
           <td>
             <input *ngIf="editingRow === volquete" [(ngModel)]="editTemp!.fecha_compra" />
             <span *ngIf="editingRow !== volquete">{{ volquete.fecha_compra | date: 'dd/MM/yyyy'}}</span>

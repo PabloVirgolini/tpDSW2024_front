@@ -26,6 +26,7 @@ export class VolqueteService {
   getAll(): Observable<Volquete[]> {
     console.log('getAll called');
     return this.http.get<{ data: Volquete[] }>(this.apiUrl).pipe(
+      tap((response) => console.log('Response from backend:', response)), // Log completo
       map((response) => response.data || []),
       catchError(this.handleError<Volquete[]>('getAll', []))
     );
@@ -38,7 +39,7 @@ export class VolqueteService {
   }
 
   add(volquete: Volquete): Observable<Volquete> {
-    if (!volquete.nro_volquete) {
+    if (!volquete.id) {
       throw new Error('Falta indicar nro');
     }
     return this.http.post<Volquete>(this.apiUrl, volquete).pipe(
@@ -48,7 +49,7 @@ export class VolqueteService {
   }
 
   update(volquete: VolqueteModel): Observable<VolqueteModel> {
-    const nro = volquete.nro_volquete;
+    const nro = volquete.id;
     if (!nro || isNaN(nro)) {
       throw new Error('Nro inválido para la actualización del volquete');
     }
