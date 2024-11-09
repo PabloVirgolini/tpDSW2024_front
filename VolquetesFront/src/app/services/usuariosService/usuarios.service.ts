@@ -14,7 +14,7 @@ export class UsuariosService {
   private usuariosSubject = new BehaviorSubject<Usuario[]>([]);
   public usuario$: Observable<Usuario[]> = this.usuariosSubject.asObservable();
 
-  private apiUrl = 'http://localhost:3000/api/usuarios';
+  private apiUrl = 'http://localhost:3000/api/users';
 
   private http = inject(HttpClient); // Use inject() to get HttpClient
 
@@ -29,6 +29,7 @@ export class UsuariosService {
   getAll(): Observable<Usuario[]> {
     console.log('getAll called');
     return this.http.get<{ data: Usuario[] }>(this.apiUrl).pipe(
+      tap((response) => console.log('Response from backend:', response)), // Log completo
       map((response) => response.data || []),
       catchError(this.handleError<Usuario[]>('getAll', []))
     );

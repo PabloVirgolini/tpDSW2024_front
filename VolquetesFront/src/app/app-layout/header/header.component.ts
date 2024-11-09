@@ -30,7 +30,7 @@ export class HeaderComponent implements OnInit {
           this.router.navigate(['/']);
         },
         (error: any) => {
-          console.error('TOken check failed:', error);
+          console.error('Token check failed:', error);
           // Aquí hay que redirigir al login cuando lo tengamos armado
         }
       );
