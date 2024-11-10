@@ -26,14 +26,14 @@ export class UsuariosComponent {
   getColspan(): number {
     return this.displayedColumns.reduce((acc) => acc + 1, 0) + 1;
   }
-  
+
   usuarioSeleccionado: UsuarioModel | null = null;
   deletingRow: UsuarioModel | null = null;
   editingRow: UsuarioModel | null = null;
   editTemp: UsuarioModel = {
-    id_usuario: 0,
+    id: 0,
     nombre_usuario: '',
-    hash: '',
+    email: '',
     rol: '',
   };
 
@@ -83,7 +83,7 @@ export class UsuariosComponent {
 
     this.subscription.add(
       this.usuariosService
-        .delete(this.deletingRow.id_usuario)
+        .delete(this.deletingRow.id)
         .subscribe({
           next: () => {
             this.loadUsuarios(); // Refresh the list
@@ -138,9 +138,9 @@ export class UsuariosComponent {
 
   onAdd(): void {
     const newUsuario: UsuarioModel = {
-      id_usuario: 0,
+      id: 0,
       nombre_usuario: '',
-      hash: '',
+      email: '',
       rol:'',
     };
     this.usuarios.push(newUsuario);

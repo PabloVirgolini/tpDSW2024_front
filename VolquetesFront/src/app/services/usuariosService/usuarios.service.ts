@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment.js';
 })
 export class UsuariosService {
   url = environment.apiUrl;
-  
+
   private usuariosSubject = new BehaviorSubject<Usuario[]>([]);
   public usuario$: Observable<Usuario[]> = this.usuariosSubject.asObservable();
 
@@ -52,9 +52,9 @@ export class UsuariosService {
   }
 
   update(auxUser: UsuarioModel): Observable<UsuarioModel> {
-    const id = auxUser.id_usuario;
+    const id = auxUser.id;
     if (!id || isNaN(id)) {
-      throw new Error('ID inválido para la actualización del tipo de volquete');
+      throw new Error('ID inválido para la actualización del un usuario');
     }
     return this.http.put<UsuarioModel>(`${this.apiUrl}/${id}`, auxUser).pipe(
       tap(() => this.loadInitialData()), // Refresh list
@@ -91,7 +91,7 @@ export class UsuariosService {
   checkToken() {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-      return this.httpClient.get(`${this.url}/user/checkToken`, { headers });
+      return this.httpClient.get(`${this.apiUrl}/user/checkToken`, { headers });
 
   }
 }

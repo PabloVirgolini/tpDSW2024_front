@@ -1,12 +1,12 @@
 export interface Usuario {
-  id_usuario: number;
+  id: number;
   nombre_usuario: string;
-  hash: string;
+  email: string;
   rol: string;
 }
 export class UsuarioModel implements Usuario {
-  id_usuario: number = 0;
+  id: number = 0;
   nombre_usuario: string = '';
-  hash: string ='';
+  email: string ='';
   rol: string='';
 }
