@@ -17,10 +17,11 @@ import { UsuariosBodyService } from './usuariosBody.service.js';
 })
 export class UsuariosComponent {
   usuarios: UsuarioModel[] = [];
-  displayedColumns: string[] = ['nombre_usuario', 'rol'];
+  displayedColumns: string[] = ['nombre_usuario', 'email','rol'];
   columnNames: { [key: string]: string } = {
-    nombre_usuario: 'usuario',
-    rol: 'nivel de permisos',
+    nombre_usuario: 'Nombre Usuario',
+    email: 'Email',
+    rol: 'Nivel Permisos',
   };
 
   getColspan(): number {
@@ -33,6 +34,7 @@ export class UsuariosComponent {
   editTemp: UsuarioModel = {
     id: 0,
     nombre_usuario: '',
+    password: '',
     email: '',
     rol: '',
   };
@@ -73,60 +75,29 @@ export class UsuariosComponent {
     console.log('Row clicked:', usuario);
   }
 
+
   delete(usuario: UsuarioModel): void {
     console.log('delete called');
-
-    this.isAddingNew = false;
-    this.isEditing = false;
-
-    this.deletingRow = usuario;
-
     this.subscription.add(
-      this.usuariosService
-        .delete(this.deletingRow.id)
-        .subscribe({
-          next: () => {
-            this.loadUsuarios(); // Refresh the list
-          },
-          error: (error) => {
-            console.error('Error al eliminar el usuario', error);
-          },
-        })
+      this.usuariosService.delete(usuario.id).subscribe({
+        next: () => this.loadUsuarios(),
+        error: (error) => console.error('Error al eliminar usuario', error),
+      })
     );
   }
 
   startEdit(usuario: UsuarioModel): void {
-    console.log('StartEdit called');
-
+    this.editingRow = usuario;
+    this.editTemp = { ...usuario }; // Copia del usuario en edición
     this.isAddingNew = false;
     this.isEditing = true;
-
-    this.editingRow = usuario;
-    this.editTemp = { ...usuario }; // Hago una copia de lo que estamos editando
   }
 
   saveEdit(): void {
-    if (this.editTemp) {
-      if (this.isAddingNew) {
-        // Si estamos en modo "Agregar"
-        this.addUsuario(this.editTemp);
-        this.isAddingNew = false; // Resetear el modo "Agregar"
-      } else {
-        if (this.isEditing) {
-          // Modo "Editar"
-          this.subscription.add(
-            this.usuariosService.update(this.editTemp).subscribe({
-              next: () => {
-                this.loadUsuarios(); // Refresh the list
-                this.editingRow = null; // Exit edit mode
-              },
-              error: (error) => {
-                console.error('Error al actualizar el Usuario', error);
-              },
-            })
-          );
-        }
-      }
+    if (this.isAddingNew) {
+      this.addUsuario(this.editTemp);
+    } else if (this.isEditing) {
+      this.updateUsuario(this.editTemp);
     }
   }
 
@@ -137,30 +108,28 @@ export class UsuariosComponent {
   }
 
   onAdd(): void {
-    const newUsuario: UsuarioModel = {
-      id: 0,
-      nombre_usuario: '',
-      email: '',
-      rol:'',
-    };
-    this.usuarios.push(newUsuario);
-    this.startEdit(newUsuario);
-    this.usuariosBodyService.startAdding();
+    this.editTemp = { id: 0, nombre_usuario: '', password: '', email: '', rol: '' };
     this.isAddingNew = true;
-    console.log('you pressed onAddProveedor in tiposVolquete-list.component');
   }
 
   addUsuario(usuario: UsuarioModel): void {
     this.subscription.add(
       this.usuariosService.add(usuario).subscribe({
-        next: (newTipo) => {
-          this.loadUsuarios();
-        },
-        error: (error) => {
-          console.error('Error adding Usuario:', error);
-        },
+        next: () => this.loadUsuarios(),
+        error: (error) => console.error('Error al agregar usuario', error),
       })
     );
+    this.cancelEdit();
+  }
+
+  updateUsuario(usuario: UsuarioModel): void {
+    this.subscription.add(
+      this.usuariosService.update(usuario).subscribe({
+        next: () => this.loadUsuarios(),
+        error: (error) => console.error('Error al actualizar usuario', error),
+      })
+    );
+    this.cancelEdit();
   }
 
   ngOnDestroy(): void {

@@ -1,9 +1,7 @@
-<!-- tipo-volquetes-list.component.html -->
 <div class="tipos-volquete-list-container">
   <h1 class="tipos-volquete-title">Usuarios</h1>
 
   <div class="tipos-volquete-table-container">
-
     <table class="tipos-volquete-table">
       <thead>
         <tr>
@@ -16,22 +14,16 @@
 
       <tbody>
         <tr *ngFor="let usuario of usuarios" (click)="onSeleccionarTipo(usuario)">
-
-          <td>
-
-            <span>{{ usuario.nombre_usuario }}</span>
-          </td>
-          <td>
-            <input *ngIf="editingRow === usuario" [(ngModel)]="editTemp.rol" />
-            <span *ngIf="editingRow !== usuario">{{ usuario.rol }}</span>
-          </td>
+          <td><span>{{ usuario.nombre_usuario }}</span></td>
+          <!--<td><span>{{ usuario.password }}</span></td>-->
+          <td><span>{{ usuario.email }}</span></td>
+          <td><span>{{ usuario.rol }}</span></td>
           <td>
             <button *ngIf="editingRow === usuario" (click)="saveEdit()">Guardar</button>
             <button *ngIf="editingRow === usuario" (click)="cancelEdit()">Cancelar</button>
             <button *ngIf="editingRow !== usuario" (click)="startEdit(usuario)">Editar</button>
             <button *ngIf="editingRow !== usuario" (click)="delete(usuario)">Eliminar</button>
           </td>
-
         </tr>
 
         <tr>
@@ -42,9 +34,62 @@
             </button>
           </td>
         </tr>
-
       </tbody>
     </table>
-
   </div>
-</div>
+
+  <!-- Modal para agregar o editar usuario -->
+  <div *ngIf="isAddingNew || isEditing" class="modal">
+    <div class="modal-content">
+      <h2>{{ isAddingNew ? 'Agregar Usuario' : 'Editar Usuario' }}</h2>
+      <form (ngSubmit)="saveEdit()">
+        <!-- Nombre de Usuario -->
+        <label for="nombre_usuario">Nombre Usuario:</label>
+        <input
+          id="nombre_usuario"
+          [(ngModel)]="editTemp.nombre_usuario"
+          name="nombre_usuario"
+          required
+          placeholder="Ej: usuario123"
+        />
+
+        <!-- Contraseña -->
+        <label for="password">Contraseña:</label>
+        <input
+          id="password"
+          [(ngModel)]="editTemp.password"
+          name="password"
+          required
+          type="password"
+          placeholder="Contraseña segura"
+        />
+
+        <!-- Email -->
+        <label for="email">Email:</label>
+        <input
+          id="email"
+          [(ngModel)]="editTemp.email"
+          name="email"
+          required
+          type="email"
+          placeholder="usuario@ejemplo.com"
+        />
+
+        <!-- Rol -->
+        <label for="rol">Rol:</label>
+        <input
+          id="rol"
+          [(ngModel)]="editTemp.rol"
+          name="rol"
+          required
+          placeholder="Ej: Administrador"
+        />
+
+        <!-- Botones -->
+        <button type="submit">{{ isAddingNew ? 'Agregar' : 'Guardar' }}</button>
+        <button type="button" (click)="cancelEdit()">Cancelar</button>
+      </form>
+    </div>
+  </div>
+
+
