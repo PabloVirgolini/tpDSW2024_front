@@ -12,7 +12,7 @@ export class TiposVolqueteService {
   private tiposVolqueteSubject = new BehaviorSubject<TipoVolquete[]>([]);
   public tiposVolquete$ : Observable<TipoVolquete[]> = this.tiposVolqueteSubject.asObservable();
 
-  private apiUrl = 'http://localhost:3000/api/tipoVolquetes';
+  private apiUrl = 'http://localhost:3000/api/volquetes/tipovolquetes';
 
   private http = inject(HttpClient); // Use inject() to get HttpClient
 
