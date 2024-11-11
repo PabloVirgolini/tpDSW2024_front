@@ -83,7 +83,7 @@ export class UsuariosService {
   }
 
   login(data: any) {
-    return this.httpClient.post(this.url + '/user/login/', data, {
+    return this.http.post('${this.apiUrl}/login', data, {
       headers: new HttpHeaders().set('Content-Type', 'application/json'),
     });
   }
@@ -91,7 +91,9 @@ export class UsuariosService {
   checkToken() {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-      return this.httpClient.get(`${this.apiUrl}/user/checkToken`, { headers });
+    return this.http.get(`${this.apiUrl}/checkToken`, { headers }).pipe(
+      catchError(this.handleError<any>('checkToken'))
+    );
 
   }
 }

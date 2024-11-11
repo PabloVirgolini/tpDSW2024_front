@@ -1,11 +1,18 @@
 <main>
-  <header>
-    <app-burger-button class="burger-button"></app-burger-button>
-    <img [src]="logoPath" alt="logo" class="logo">Volquetes 
-
-    <ul class="login-container">
-      <li><a (click)="loginAction()">LogIn</a></li>
-    </ul>
+  <header class="header-container">
+    
+      <div>
+        <app-burger-button class="burger-button"></app-burger-button>
+        <a href="http://localhost:4200">
+          <img [src]="logoPath" alt="logo" class="logo">
+        </a>Volquetes
+      </div>
+      
+      <div>
+        <ul class="login-container">
+          <li><a (click)="loginAction()">LogIn</a></li>
+        </ul>
+      </div>
     
   </header>
   
