@@ -14,6 +14,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 
+import {Observer} from 'rxjs';
+
 @Component({
   standalone:true,
   selector: 'app-login',
@@ -40,41 +42,48 @@ export class LoginComponent implements OnInit {
     public dialogRef: MatDialogRef<LoginComponent>,
     public ngxService: NgxUiLoaderService,
     private snackbarService: SnackbarService
-  ) {}
+  ) {    this.loginForm = this.formBuilder.group({
+    nombreUsuario: [null, [Validators.required]],
+    password: [null, Validators.required],
+  });
+  this.responseMessage = '';
+}
 
   ngOnInit(): void {
-    this.loginForm = this.formBuilder.group({
-      nombreUsuario: [null, [Validators.required]],
-      password: [null, Validators.required],
-    });
   }
 
   handleSubmit() {
     this.ngxService.start();
+
     var formData = this.loginForm.value;
     var data = {
-      nombreUsuario: formData.nombreUsuario,
+      nombre_usuario: formData.nombreUsuario,
       password: formData.password,
     };
-    this.userService.login(data).subscribe(
-      (response: any) => {
+
+    //Primero definimos el Observer completo y después nos suscribimos.
+    const observer: Observer<any>={
+    next:(response)=>{
         this.ngxService.stop();
         this.dialogRef.close();
         localStorage.setItem('token', response.token);
         this.router.navigate(['/']);
       },
-      (error) => {
+      error: (error) => {
         this.ngxService.stop();
-        if (error.error?.message) {
-          this.responseMessage = error.error?.message;
-        } else {
-          this.responseMessage = GlobalConstants.genericError;
-        }
-        this.snackbarService.openSnackBar(
-          this.responseMessage,
-          GlobalConstants.error
-        );
-      }
-    );
+        this.responseMessage = error.error?.message || GlobalConstants.genericError;
+        this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+      },
+      complete: ()=>console.log('Login request completed'),
+    };
+    
+    // Finalmente se llama al método LOGIN del servicio USUARIOSSERVICE para
+    // enviar la solicitud de incio de sesión con los datos del formulario.
+    this.userService.login(data).subscribe(observer);
+
+    //En caso de éxito se dispara por NEXT.
+    // Para la animación de carga, cierra el cuadro de diálogo, guarda el token
+    // recibido en el localStorage para futuras solicitudes, y dirige al usuario
+    // a la página principal "(/)"
   }
 }
