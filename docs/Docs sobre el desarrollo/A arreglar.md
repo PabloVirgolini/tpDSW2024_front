@@ -9,6 +9,8 @@
     d.
     Cuando agrego, si no completo la Descripcion y hago click en Guardar no lo guarda, pero genera un error y no avisa qué problema está teniendo el usuario. Debería manejar el error y dar una alerta para que complete la Descripcion.
 
+    e. Que no te deje borrar un tipo de volquete que se este usando en la clase de VOLQUETE.
+
 
 2.- Usuarios
     a. no puedo editar el nivel de permiso.

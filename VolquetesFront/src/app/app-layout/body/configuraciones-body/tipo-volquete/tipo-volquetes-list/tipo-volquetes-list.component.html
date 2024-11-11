@@ -2,8 +2,12 @@
 <div class="tipos-volquete-list-container">
   <h1 class="tipos-volquete-title">Tipos de Volquete</h1>
 
-  <div class="tipos-volquete-table-container">
+  <!-- Mensaje de error -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
 
+  <div class="tipos-volquete-table-container">
     <table class="tipos-volquete-table">
       <thead>
         <tr>
@@ -16,9 +20,7 @@
 
       <tbody>
         <tr *ngFor="let tipo of tipos" (click)="onSeleccionarTipo(tipo)">
-
           <td>
-
             <span>{{ tipo.id }}</span>
           </td>
           <td>
@@ -31,7 +33,6 @@
             <button *ngIf="editingRow !== tipo" (click)="startEdit(tipo)">Editar</button>
             <button *ngIf="editingRow !== tipo" (click)="delete(tipo)">Eliminar</button>
           </td>
-
         </tr>
 
         <tr>
@@ -45,6 +46,5 @@
 
       </tbody>
     </table>
-
   </div>
 </div>

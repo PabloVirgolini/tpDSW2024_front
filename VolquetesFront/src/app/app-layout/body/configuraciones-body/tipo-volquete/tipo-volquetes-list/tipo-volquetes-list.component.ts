@@ -18,6 +18,7 @@ import { TiposVolqueteBodyService } from '../tipos-volquete-body.service.js';
 })
 export class TipoVolquetesListComponent implements OnInit, OnDestroy {
   tipos: TipoVolqueteModel[] = [];
+  errorMessage: string | null = null;
   displayedColumns: string[] = [
     'id',
     'descripcion_tipo_volquete',
@@ -65,26 +66,44 @@ export class TipoVolquetesListComponent implements OnInit, OnDestroy {
   }
 
   delete(tipo: TipoVolqueteModel): void {
-    console.log('delete called');
+    console.log('ID a eliminar:', tipo.id);
 
     this.isAddingNew = false;
     this.isEditing = false;
 
     this.deletingRow = tipo;
 
+    // Verificar que el ID sea válido
+    if (!this.deletingRow.id || isNaN(this.deletingRow.id)) {
+      console.error('ID inválido:', this.deletingRow.id);
+      return;
+    }
+
     this.subscription.add(
-      this.tiposVolqueteService
-        .delete(this.deletingRow.id)
-        .subscribe({
-          next: () => {
-            this.loadTiposVolquete(); // Refresh the list
-          },
-          error: (error) => {
-            console.error('Error al eliminar el tipo de volquete', error);
-          },
-        })
+      this.tiposVolqueteService.delete(this.deletingRow.id).subscribe({
+        next: () => {
+          this.loadTiposVolquete(); // Refresh the list
+        },
+        error: (error) => {
+          console.error('Error al eliminar el tipo de volquete:', error);
+
+          // Si hay un error 400, mostrar los detalles del error
+          if (error.status === 400) {
+            console.error('Detalles del error 400:', error.error);
+            // Mostrar el mensaje de error
+            this.errorMessage = 'No se pudo eliminar el tipo de volquete: ' + (error.error?.message || 'Error desconocido');
+          } else {
+            // Mostrar el error genérico si no es un error 400
+            this.errorMessage = 'Ocurrió un error inesperado. Inténtelo nuevamente.';
+          }
+        },
+      })
     );
   }
+
+
+
+
 
   startEdit(tipo: TipoVolqueteModel): void {
     console.log('StartEdit called');

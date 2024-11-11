@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, catchError, of, tap, map } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { TipoVolquete, TipoVolqueteModel } from '../../model/interfaces/tipo_volquete.interface.js';
+import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -82,16 +83,39 @@ update(tipoVolquete: TipoVolqueteModel): Observable<TipoVolqueteModel> {
 delete(id: number): Observable<void> {
   return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
     tap(() => this.loadInitialData()), // Refresh list
-    catchError(this.handleError<void>('delete'))
+    catchError((error) => {
+      console.error('Error al eliminar el tipo de volquete', error);
+
+      // Si el error es un 400, podemos mostrar detalles adicionales.
+      if (error.status === 400) {
+        catchError(this.handleError<void>('delete'))
+      }
+
+      // Puedes retornar un observable con el error para que el componente también lo maneje.
+      return throwError(error);  // Propaga el error hacia el componente
+    })
   );
 }
 
 private handleError<T>(operation = 'operation', result?: T) {
   return (error: any): Observable<T> => {
+    // Loguear detalles del error para depuración
     console.error(`${operation} failed: ${error.message}`);
+
+    // Verificar si el error es de tipo 400 (Bad Request) y tiene un mensaje
+    if (error.status === 400 && error.error && error.error.message) {
+      // Mostrar el mensaje específico del backend (ejemplo: usando alert, puedes cambiarlo por un modal o un toaster)
+      alert(`Error: ${error.error.message}`);
+    } else {
+      // Mostrar un mensaje genérico si el error no tiene detalles o no es un 400
+      alert('Ocurrió un error inesperado. Por favor, inténtalo nuevamente.');
+    }
+
+    // Se puede personalizar para devolver un resultado predeterminado o vacío
     return of(result as T);
   };
 }
+
 
 private emitirListadoActualizado() {
   this.getAll().subscribe(tiposVolquete => {
