@@ -1,5 +1,6 @@
 main {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #000;
@@ -9,9 +10,33 @@ main {
 header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
   flex-grow: 1;
-  padding: 0px;
-  /* Adjust as necessary */
+}
+
+.header {
+  padding: 60px;
+  text-align: center;
+  background: #1abc9c;
+  color: white;
+}
+
+.header-container{
+  display: flex;
+  width: 100%;
+  justify-content: space-between; /* Distribuye los elementos en los extremos del contenedor */
+  align-items: center;
+}
+.header-container>div:first-child {
+  display: flex;
+  align-items: center;
+}
+
+.burger-button {
+  
+  margin-left:2px;
+  
 }
 
 .logo {
@@ -23,11 +48,6 @@ header {
   /* Adjust as necessary */
 }
 
-.burger-button {
-  
-  margin-left:2px;
-  
-}
 
 * {
   box-sizing: border-box;
@@ -40,12 +60,7 @@ body {
 }
 
 /* Header/logo Title */
-.header {
-  padding: 60px;
-  text-align: center;
-  background: #1abc9c;
-  color: white;
-}
+
 
 /* Style the top navigation bar */
 .navbar {
@@ -253,10 +268,12 @@ a:hover::after {
   vertical-align: middle;
 }
 
+
 .login-container {
   list-style: none;
   margin: 0;
   padding: 0;
+  text-align: right;
 }
 
 .login-container li {
@@ -269,4 +286,7 @@ a:hover::after {
   color: #333;
   /* Cambia este color según el diseño */
   font-weight: bold;
+}
+.login-container a:hover {
+  cursor: pointer;  /* Para que aparezca la manito en el click */
 }
