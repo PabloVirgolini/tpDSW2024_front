@@ -25,15 +25,15 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     const token = localStorage.getItem('token');
     if (token) {
-      this.userService.checkToken().subscribe(
-        (response: any) => {
+      this.userService.checkToken().subscribe({
+        next: (response: any) => {
           this.router.navigate(['/']);
-        },
-        (error: any) => {
+          },
+          error: (error: any) => {
           console.error('Token check failed:', error);
           // Aquí hay que redirigir al login cuando lo tengamos armado
         }
-      );
+      });
     }
   }
 
