@@ -39,9 +39,6 @@ export class VolqueteService {
   }
 
   add(volquete: Volquete): Observable<Volquete> {
-    if (!volquete.id) {
-      throw new Error('Falta indicar nro');
-    }
     return this.http.post<Volquete>(this.apiUrl, volquete).pipe(
       tap(() => this.loadInitialData()),
       catchError(this.handleError<Volquete>('add'))

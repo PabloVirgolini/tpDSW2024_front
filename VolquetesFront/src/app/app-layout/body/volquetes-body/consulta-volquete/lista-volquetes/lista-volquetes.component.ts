@@ -23,9 +23,10 @@ export class ListaVolquetesComponent {
   volquetes: VolqueteModel[] = [];
   displayedColumns: string[] = [
     'id',
-    'TipoVolquete.descripcion_tipo_volquete',
     'marca',
+    'fecha_fabricacion',
     'fecha_compra',
+    'TipoVolquete',
   ];
 
   getColspan(): number {
@@ -34,10 +35,10 @@ export class ListaVolquetesComponent {
 
   columnNames: { [key: string]: string } = {
     id: 'Nro',
-    'TipoVolquete.descripcion_tipo_volquete': 'Tipo',
     marca: 'Marca',
+    fecha_fabricacion: 'Fecha de Fabricacion',
     fecha_compra: 'Fecha de Compra',
-    estado_alquiler: 'Estado',
+    TipoVolquete: 'Tipo Volquete',
   };
 
   volqueteSeleccionado: VolqueteModel | null = null;
@@ -154,7 +155,7 @@ export class ListaVolquetesComponent {
           this.loadVolquetes();
         },
         error: (error) => {
-          console.error('Error adding TipoVolquete:', error);
+          console.error('Error al agregar Volquete:', error);
         },
       })
     );

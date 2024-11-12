@@ -1,9 +1,7 @@
-<!-- tipo-volquetes-list.component.html -->
 <div class="tipos-volquete-list-container">
   <h1 class="tipos-volquete-title">Volquetes</h1>
 
   <div class="tipos-volquete-table-container">
-
     <table class="tipos-volquete-table">
       <thead>
         <tr>
@@ -13,39 +11,18 @@
           <th>Acciones</th>
         </tr>
       </thead>
-
       <tbody>
         <tr *ngFor="let volquete of volquetes" (click)="onSeleccionarTipo(volquete)">
-
+          <td><span>{{ volquete.id }}</span></td>
+          <td><span>{{ volquete.TipoVolquete.descripcion_tipo_volquete }}</span></td>
+          <td><span>{{ volquete.marca }}</span></td>
+          <td><span>{{ volquete.fecha_fabricacion | date: 'dd/MM/yyyy' }}</span></td>
+          <td><span>{{ volquete.fecha_compra | date: 'dd/MM/yyyy' }}</span></td>
           <td>
-            <span>{{ volquete.id }}</span>
+            <button (click)="startEdit(volquete)">Editar</button>
+            <button (click)="delete(volquete)">Eliminar</button>
           </td>
-          <td>
-            <ng-container *ngIf="editingRow === volquete">
-              <!-- Verifica que editTemp y tipo_volquete están definidos -->
-              <input *ngIf="editTemp && editTemp.TipoVolquete" [(ngModel)]="editTemp.TipoVolquete.descripcion_tipo_volquete" />
-            </ng-container>
-            <span *ngIf="editingRow !== volquete">{{ volquete.TipoVolquete.descripcion_tipo_volquete }}</span>
-          </td>
-          <td>
-            <input *ngIf="editingRow === volquete" [(ngModel)]="editTemp!.marca" />
-            <span *ngIf="editingRow !== volquete">{{ volquete.marca }}</span>
-          </td>
-
-          <td>
-            <input *ngIf="editingRow === volquete" [(ngModel)]="editTemp!.fecha_compra" />
-            <span *ngIf="editingRow !== volquete">{{ volquete.fecha_compra | date: 'dd/MM/yyyy'}}</span>
-          </td>
-
-          <td>
-            <button *ngIf="editingRow === volquete" (click)="saveEdit()">Guardar</button>
-            <button *ngIf="editingRow === volquete" (click)="cancelEdit()">Cancelar</button>
-            <button *ngIf="editingRow !== volquete" (click)="startEdit(volquete)">Editar</button>
-            <button *ngIf="editingRow !== volquete" (click)="delete(volquete)">Eliminar</button>
-          </td>
-
         </tr>
-
         <tr>
           <td [attr.colspan]="getColspan()" class="add-row-cell">
             <button (click)="onAdd()" class="add-button">
@@ -54,9 +31,35 @@
             </button>
           </td>
         </tr>
-
       </tbody>
     </table>
+  </div>
+</div>
 
+<!-- Modal para agregar o editar volquete -->
+<div *ngIf="isAddingNew || isEditing" class="modal">
+  <div class="modal-content">
+    <h2>{{ isAddingNew ? 'Agregar Volquete' : 'Editar Volquete' }}</h2>
+    <form (ngSubmit)="saveEdit()">
+      <!-- Marca -->
+      <label for="marca">Marca Volquete:</label>
+      <input id="marca" [(ngModel)]="editTemp!.marca" name="marca" required placeholder="Ej: Hitachi" />
+
+      <!-- Fecha Fabricacion -->
+      <label for="fecha_fabricacion">Fecha Fabricacion:</label>
+      <input id="fecha_fabricacion" [(ngModel)]="editTemp!.fecha_fabricacion" name="fecha_fabricacion" required type="date" />
+
+      <!-- Fecha Compra -->
+      <label for="fecha_compra">Fecha Compra:</label>
+      <input id="fecha_compra" [(ngModel)]="editTemp!.fecha_compra" name="fecha_compra" required type="date" />
+
+      <!-- Tipo Volquete -->
+      <label for="TipoVolquete">Id del Tipo Volquete:</label>
+      <input id="TipoVolquete" [(ngModel)]="editTemp!.TipoVolquete.id" name="id" required placeholder="Ej: 1" />
+
+      <!-- Botones -->
+      <button type="submit">{{ isAddingNew ? 'Agregar' : 'Guardar' }}</button>
+      <button type="button" (click)="cancelEdit()">Cancelar</button>
+    </form>
   </div>
 </div>
