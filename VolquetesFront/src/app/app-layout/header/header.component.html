@@ -10,8 +10,8 @@
       
       <div>
         <ul class="login-container">
+          <li *ngIf="nombreUsuario"> {{ nombreUsuario }} <button (click)="logout()">Logout</button> </li>
           <li *ngIf="!nombreUsuario"><a (click)="loginAction()">LogIn</a></li>
-          <li *ngIf="nombreUsuario"> {{ nombreUsuario }}</li>
           
         </ul>
       </div>

@@ -62,4 +62,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     dialogConfig.width = '550px';
     this.dialog.open(LoginComponent, dialogConfig);
   }
+
+  logout(){
+    this.authService.clearUser();
+    this.nombreUsuario = null;
+  }
 }
