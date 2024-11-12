@@ -95,7 +95,7 @@ export class UsuariosService {
         tap((response: any) => {
           if (response.token && response.nombre_usuario) {
             localStorage.setItem('token', response.token);
-            this.authService.setUser(response.nombre_usuario);
+            this.authService.setUser(response.nombre_usuario, response.token);
           }
         }),
         catchError(this.handleError<any>('login'))

@@ -13,7 +13,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-
+import { AuthService } from '../../../../services/authService/auth.service.js';
 import {Observer} from 'rxjs';
 
 @Component({
@@ -41,7 +41,8 @@ export class LoginComponent implements OnInit {
     private userService: UsuariosService,
     public dialogRef: MatDialogRef<LoginComponent>,
     public ngxService: NgxUiLoaderService,
-    private snackbarService: SnackbarService
+    private snackbarService: SnackbarService, 
+    private authService: AuthService
   ) {    this.loginForm = this.formBuilder.group({
     nombreUsuario: [null, [Validators.required]],
     password: [null, Validators.required],
@@ -63,18 +64,20 @@ export class LoginComponent implements OnInit {
 
     //Primero definimos el Observer completo y después nos suscribimos.
     const observer: Observer<any>={
-    next:(response)=>{
-        this.ngxService.stop();
-        this.dialogRef.close();
-        localStorage.setItem('token', response.token);
-        this.router.navigate(['/']);
-      },
-      error: (error) => {
-        this.ngxService.stop();
-        this.responseMessage = error.error?.message || GlobalConstants.genericError;
-        this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
-      },
-      complete: ()=>console.log('Login request completed'),
+      next:(response)=>{
+          this.ngxService.stop();
+          this.dialogRef.close();
+           // En el service esto hace que se emita un cambio (next) que debería ser escuchado y actualizar la pagina
+          //localStorage.setItem('token', response.token); --> esto lo hace el authService.setUser
+          this.authService.setUser(formData.nombreUsuario, response.token);
+          this.router.navigate(['/']);
+        },
+        error: (error) => {
+          this.ngxService.stop();
+          this.responseMessage = error.error?.message || GlobalConstants.genericError;
+          this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
+        },
+        complete: ()=>console.log('Login request completed'),
     };
     
     // Finalmente se llama al método LOGIN del servicio USUARIOSSERVICE para

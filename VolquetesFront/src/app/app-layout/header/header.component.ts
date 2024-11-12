@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BurgerMenuComponent } from './burger-button/burger-button.component.js';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { UsuariosService } from '../../services/usuariosService/usuarios.service.js';
 import { LoginComponent } from './login/login/login.component.js';
 import { AuthService } from '../../services/authService/auth.service.js';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -14,9 +15,11 @@ import { AuthService } from '../../services/authService/auth.service.js';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-export class HeaderComponent implements OnInit {
-  
+export class HeaderComponent implements OnInit, OnDestroy {
+
   logoPath = '/assets/logo.svg';
+
+  private authSubscription: Subscription|null = null;
   nombreUsuario: string | null = null;
 
   constructor(
@@ -28,9 +31,12 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     const token = localStorage.getItem('token');
-    this.authService.authenticatedUser$.subscribe((nombre) => {
-      this.nombreUsuario = nombre;
-    });
+
+    this.authSubscription = this.authService.authenticatedUser$.subscribe(
+      (nombre) => {
+        this.nombreUsuario = nombre;
+      }
+    );
     if (token) {
       this.userService.checkToken().subscribe({
         next: (response: any) => {
@@ -42,10 +48,16 @@ export class HeaderComponent implements OnInit {
         },
       });
     }
-    
+  }
+
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
 
   loginAction() {
+    this.authService.clearUser();
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '550px';
     this.dialog.open(LoginComponent, dialogConfig);
