@@ -7,31 +7,46 @@ import { FooterComponent } from './footer/footer.component.js';
 import { SidebarComponent } from './sidebar/sidebar.component.js';
 import { RouterModule } from '@angular/router';
 import { ScrollService } from '../services/scrollService/scroll.service.js';
+import { AuthService } from '../services/authService/auth.service.js';
+
 
 @Component({
   selector: 'app-app-layout',
   standalone: true,
-  imports: [CommonModule, 
-            HeaderComponent, FooterComponent,SidebarComponent, SecondHeaderComponent,
-            RouterModule],
+  imports: [
+    CommonModule,
+    HeaderComponent,
+    FooterComponent,
+    SidebarComponent,
+    SecondHeaderComponent,
+    RouterModule,
+  ],
   templateUrl: './app-layout.component.html',
   styleUrl: './app-layout.component.css',
 })
 export class AppLayoutComponent implements OnDestroy {
   public showFooter = false;
   private scrollSubscription: Subscription;
+  isAuthenticated = false;
 
-  constructor(private scrollService: ScrollService) {
+  constructor(
+    private scrollService: ScrollService,
+    private authService: AuthService
+  ) {
     this.scrollSubscription = this.scrollService.scrollDirection$.subscribe(
-      event => {
+      (event) => {
         this.onScrollDirection(event);
-      });
+      }
+    );
   }
-  
+
   ngOnDestroy() {
     this.scrollSubscription.unsubscribe();
   }
-
+  ngOnInit(): void {
+    this.isAuthenticated = this.authService.isAuthenticated();
+  }
+  
   onScrollDirection(event: string) {
     // Handle scroll direction event here
     console.log(`Scroll direction: ${event}`);

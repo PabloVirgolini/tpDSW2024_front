@@ -3,6 +3,7 @@ import { Observable, BehaviorSubject, catchError, of, tap, map } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Usuario, UsuarioModel } from '../../model/interfaces/usuario.interface.js';
 import { environment } from '../../../environments/environment.js';
+import { AuthService } from '../authService/auth.service.js';
 
 
 @Injectable({
@@ -18,7 +19,10 @@ export class UsuariosService {
 
   private http = inject(HttpClient); // Use inject() to get HttpClient
 
-  constructor(private httpClient: HttpClient) {
+  constructor(
+    private httpClient: HttpClient,
+    private authService: AuthService // Inyecta AuthService aquí
+  ) {
     this.loadInitialData();
   }
 
@@ -83,17 +87,26 @@ export class UsuariosService {
   }
 
   login(data: any) {
-    return this.http.post(`${this.apiUrl}/login`, data, {
-      headers: new HttpHeaders().set('Content-Type', 'application/json'),
-    });
+    return this.http
+      .post(`${this.apiUrl}/login`, data, {
+        headers: new HttpHeaders().set('Content-Type', 'application/json'),
+      })
+      .pipe(
+        tap((response: any) => {
+          if (response.token && response.nombre_usuario) {
+            localStorage.setItem('token', response.token);
+            this.authService.setUser(response.nombre_usuario);
+          }
+        }),
+        catchError(this.handleError<any>('login'))
+      );
   }
 
   checkToken(): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get(`${this.apiUrl}/checkToken`, { headers }).pipe(
-      catchError(this.handleError<any>('checkToken'))
-    );
-
+    return this.http
+      .get(`${this.apiUrl}/checkToken`, { headers })
+      .pipe(catchError(this.handleError<any>('checkToken')));
   }
 }
