@@ -13,9 +13,11 @@
 
 
 2.- Usuarios
-    a. no puedo editar el nivel de permiso.
-    b. El nivel de permiso debería salir de un listado de niveles
-    c. Cuando quiero agregar un usuario, no se me deja editar el nombre. Siempre me queda en blanco ese espacio, generando un error.
+    a. (RESUELTO) no puedo editar el nivel de permiso.
+
+    b. (RESUELTO) El nivel de permiso debería salir de un listado de niveles
+
+    c. (RESUELTO) Cuando quiero agregar un usuario, no se me deja editar el nombre. Siempre me queda en blanco ese espacio, generando un error.
 
 
 3.- (RESUELTO)

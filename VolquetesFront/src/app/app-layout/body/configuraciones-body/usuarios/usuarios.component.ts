@@ -17,7 +17,7 @@ import { UsuariosBodyService } from './usuariosBody.service.js';
 })
 export class UsuariosComponent {
   usuarios: UsuarioModel[] = [];
-  displayedColumns: string[] = ['nombre_usuario', 'email','rol'];
+  displayedColumns: string[] = ['nombre_usuario', 'email', 'rol'];
   columnNames: { [key: string]: string } = {
     nombre_usuario: 'Nombre Usuario',
     email: 'Email',
@@ -38,6 +38,8 @@ export class UsuariosComponent {
     email: '',
     rol: '',
   };
+
+  listadoRoles = ['Admin','Usuario'];
 
   isAddingNew: boolean = false;
   isEditing: boolean = false;
@@ -75,7 +77,6 @@ export class UsuariosComponent {
     console.log('Row clicked:', usuario);
   }
 
-
   delete(usuario: UsuarioModel): void {
     console.log('delete called');
     this.subscription.add(
@@ -108,7 +109,13 @@ export class UsuariosComponent {
   }
 
   onAdd(): void {
-    this.editTemp = { id: 0, nombre_usuario: '', password: '', email: '', rol: '' };
+    this.editTemp = {
+      id: 0,
+      nombre_usuario: '',
+      password: '',
+      email: '',
+      rol: '',
+    };
     this.isAddingNew = true;
   }
 

@@ -77,13 +77,14 @@
 
         <!-- Rol -->
         <label for="rol">Rol:</label>
-        <input
+        <select
           id="rol"
           [(ngModel)]="editTemp.rol"
           name="rol"
           required
-          placeholder="Ej: Administrador"
-        />
+        >
+        <option *ngFor="let rol of listadoRoles" [value]="rol">{{ rol }}</option>
+        </select>
 
         <!-- Botones -->
         <button type="submit">{{ isAddingNew ? 'Agregar' : 'Guardar' }}</button>
