@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms'
 import { TipoVolqueteModel } from '../../../../../model/interfaces/tipo_volquete.interface.js';
 import { TiposVolqueteService } from '../../../../../services/tiposVolqueteService/tipos-volquete.service.js';
 import { TiposVolqueteBodyService } from '../tipos-volquete-body.service.js';
+import { SnackbarService } from '../../../../../services/snackbarService/snackbar.service.js';
+import { GlobalConstants } from '../../../../../../shared/global-constants.js';
 
 
 @Component({
@@ -43,7 +45,8 @@ export class TipoVolquetesListComponent implements OnInit, OnDestroy {
 
   constructor(
     private tiposVolqueteService: TiposVolqueteService,
-    private tiposVolqueteFormListService: TiposVolqueteBodyService
+    private tiposVolqueteFormListService: TiposVolqueteBodyService,
+    private snackbarService:SnackbarService
   ) {}
 
   ngOnInit(): void {
@@ -96,6 +99,7 @@ export class TipoVolquetesListComponent implements OnInit, OnDestroy {
             // Mostrar el error genérico si no es un error 400
             this.errorMessage = 'Ocurrió un error inesperado. Inténtelo nuevamente.';
           }
+          this.snackbarService.openSnackBar(this.errorMessage, GlobalConstants.error);
         },
       })
     );

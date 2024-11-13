@@ -1,3 +1,19 @@
+0.- CheckToken
+    a. Apenas se inicia la página aparece un error:
+
+    "Failed to laod resorce: the server responded with a status 500".
+    :3000/api/users/checkToken:1 
+
+    Otro error inmediatamente:
+
+    "checkToken failed: Http failure response for http://localhost:3000/api/users/checkToken: 500 Internal Server Error" 
+    usuarios.service.ts:78
+
+
+    b. El checkToken no está andando del todo. El AuthService Lo único que se fija es que exista un token, pero no lo valida contra el backend.
+
+    
+
 1.- Tipos de Volquete
     a. (RESUELTO)
     Se puede hacer click en "AGREGAR" indefinidamente sin terminar de haber definido el anteior a agregar.
@@ -9,7 +25,9 @@
     d.
     Cuando agrego, si no completo la Descripcion y hago click en Guardar no lo guarda, pero genera un error y no avisa qué problema está teniendo el usuario. Debería manejar el error y dar una alerta para que complete la Descripcion.
 
-    e. Que no te deje borrar un tipo de volquete que se este usando en la clase de VOLQUETE.
+    e. (RESUELTO) Que no te deje borrar un tipo de volquete que se este usando en la clase de VOLQUETE.
+        
+        e.1.- Que el mensaje de alerta lo tire el snackbar en lugar de un texto en la página.
 
 
 2.- Usuarios
