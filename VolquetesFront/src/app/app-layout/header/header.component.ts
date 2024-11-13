@@ -16,10 +16,9 @@ import { Subscription } from 'rxjs';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-
   logoPath = '/assets/logo.svg';
 
-  private authSubscription: Subscription|null = null;
+  private authSubscription: Subscription | null = null;
   nombreUsuario: string | null = null;
 
   constructor(
@@ -63,8 +62,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.dialog.open(LoginComponent, dialogConfig);
   }
 
-  logout(){
+  logout() {
     this.authService.clearUser();
     this.nombreUsuario = null;
+    this.reloadPage();
+  }
+
+  reloadPage() {
+    window.location.reload();
   }
 }

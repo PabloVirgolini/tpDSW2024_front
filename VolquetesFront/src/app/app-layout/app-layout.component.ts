@@ -29,6 +29,9 @@ export class AppLayoutComponent implements OnDestroy {
   private scrollSubscription: Subscription;
   isAuthenticated = false;
 
+  private authSubscription: Subscription | null = null;
+  nombreUsuario: string | null = null;
+
   constructor(
     private scrollService: ScrollService,
     private authService: AuthService
@@ -42,11 +45,19 @@ export class AppLayoutComponent implements OnDestroy {
 
   ngOnDestroy() {
     this.scrollSubscription.unsubscribe();
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
   ngOnInit(): void {
     this.isAuthenticated = this.authService.isAuthenticated();
+    this.authSubscription = this.authService.authenticatedUser$.subscribe(
+      (nombre) => {
+        this.nombreUsuario = nombre;
+      }
+    );
   }
-  
+
   onScrollDirection(event: string) {
     // Handle scroll direction event here
     console.log(`Scroll direction: ${event}`);

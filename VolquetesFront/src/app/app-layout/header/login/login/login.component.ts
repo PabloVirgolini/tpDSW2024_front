@@ -52,6 +52,10 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
   }
+  
+  reloadPage(){
+    window.location.reload();
+  }
 
   handleSubmit() {
     this.ngxService.start();
@@ -71,6 +75,7 @@ export class LoginComponent implements OnInit {
           //localStorage.setItem('token', response.token); --> esto lo hace el authService.setUser
           this.authService.setUser(formData.nombreUsuario, response.token);
           this.router.navigate(['/']);
+          this.reloadPage();
         },
         error: (error) => {
           this.ngxService.stop();
