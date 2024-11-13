@@ -18,7 +18,8 @@
     c. Cuando quiero agregar un usuario, no se me deja editar el nombre. Siempre me queda en blanco ese espacio, generando un error.
 
 
-3.- Falta que el usuario se logee
+3.- (RESUELTO)
+Falta que el usuario se logee
 
 4.- Según el rol del usuario se debería poder ver "Configuraciones" o no.
 
