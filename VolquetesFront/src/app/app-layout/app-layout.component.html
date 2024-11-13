@@ -10,7 +10,7 @@
   <div *ngIf="isAuthenticated">
     <app-sidebar></app-sidebar>
   </div>
-  <div class="main-content">
+  <div class="main-content" *ngIf="isAuthenticated">
     <router-outlet></router-outlet>
   </div>
 <app-footer *ngIf="showFooter" class="fade-in-out"></app-footer>
