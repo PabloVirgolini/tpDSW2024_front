@@ -12,7 +12,7 @@
 
     b. El checkToken no está andando del todo. El AuthService Lo único que se fija es que exista un token, pero no lo valida contra el backend.
 
-    
+
 
 1.- Tipos de Volquete
     a. (RESUELTO)
@@ -27,7 +27,7 @@
 
     e. (RESUELTO) Que no te deje borrar un tipo de volquete que se este usando en la clase de VOLQUETE.
         
-        e.1.- Que el mensaje de alerta lo tire el snackbar en lugar de un texto en la página.
+        e.1.- (RESUELTO) Que el mensaje de alerta lo tire el snackbar en lugar de un texto en la página.
 
 
 2.- Usuarios
