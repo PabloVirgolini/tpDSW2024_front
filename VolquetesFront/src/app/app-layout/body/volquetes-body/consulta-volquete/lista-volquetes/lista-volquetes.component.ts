@@ -2,24 +2,28 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VolqueteModel } from '../../../../../../../../VolquetesFront/src/app/model/interfaces/volquete.interface.js'
 import { Volquete } from '../../../../../../../../VolquetesFront/src/app/model/interfaces/volquete.interface.js';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormBuilder, FormGroup,Validators  } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { VolqueteService } from '../../../../../services/volqueteService/volquete.service.js';
+import { VolqueteService } from     '../../../../../services/volqueteService/volquete.service.js';
+import { TiposVolqueteService } from '../../../../../services/tiposVolqueteService/tipos-volquete.service.js';
+import { Observable } from 'rxjs';
 import { TipoVolqueteModel } from '../../../../../model/interfaces/tipo_volquete.interface.js';
+import { VolqueteBodyService } from '../../volquete-body.service.js';
 
 
 
+export class TuModulo { }
 @Component({
   selector: 'app-lista-volquetes',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './lista-volquetes.component.html',
   styleUrl: './lista-volquetes.component.css',
 })
 export class ListaVolquetesComponent {
   @Input() volquete!: Volquete;
-
+  volqueteForm: FormGroup;
   volquetes: VolqueteModel[] = [];
   displayedColumns: string[] = [
     'id',
@@ -28,6 +32,13 @@ export class ListaVolquetesComponent {
     'fecha_compra',
     'tipoVolquete',
   ];
+  tipoVolquetes: TipoVolqueteModel[] = [];
+  isAddingNew: boolean = false; // Variable de control para el estado de agregar nuevo
+  isEditing: boolean = false; // Variable de control para el estado de editar
+  editTemp: VolqueteModel | null = null; // Variable temporal para almacenar los datos de edición
+  volqueteSeleccionado: VolqueteModel | null = null;
+  deletingRow: VolqueteModel | null = null;
+  editingRow: VolqueteModel | null = null;
 
   getColspan(): number {
     return this.displayedColumns.reduce((acc) => acc + 1, 0) + 1;
@@ -41,29 +52,55 @@ export class ListaVolquetesComponent {
     tipoVolquete: 'Tipo Volquete',
   };
 
-  volqueteSeleccionado: VolqueteModel | null = null;
-  deletingRow: VolqueteModel | null = null;
-  editingRow: VolqueteModel | null = null;
-  editTemp: VolqueteModel | null = null;
-
-  isAddingNew: boolean = false;
-  isEditing: boolean = false;
 
   private subscription = new Subscription();
 
-  constructor(private volqueteService: VolqueteService) {}
+  constructor(
+    private fb: FormBuilder,
+    private volqueteService: VolqueteService,
+    private tipoVolqueteService: TiposVolqueteService,
+    private VolqueteFormListService: VolqueteBodyService,
+
+  ) {
+      // Inicializamos el formulario con los controles
+      this.volqueteForm = this.fb.group({
+        marca: ['', Validators.required], // Marca con validación requerida
+        fecha_fabricacion: ['', Validators.required], // Fecha de fabricación
+        fecha_compra: ['', Validators.required], // Fecha de compra
+        tipoVolquete: [null, Validators.required], // Tipo de volquete con validación
+        });
+  }
 
   ngOnInit(): void {
     console.log('ngOnInit called');
     this.loadVolquetes();
+    this.loadTipoVolquetes();
+    this.volqueteForm = this.fb.group({
+      marca: ['', Validators.required],
+      fecha_fabricacion: ['', Validators.required],
+      fecha_compra: ['', Validators.required],
+      tipoVolquete: ['', Validators.required]
+    });
   }
 
+  loadTipoVolquetes(): void {
+    this.subscription.add(
+      this.tipoVolqueteService.getAll().subscribe({
+        next: (data) => {
+          this.tipoVolquetes = data; // Guarda todos los tipos en el array
+        },
+        error: (error) => {
+          console.error('Error al cargar los tipos de volquete', error);
+        },
+      })
+    );
+  }
   loadVolquetes(): void {
     this.subscription.add(
       this.volqueteService.volquetes$.subscribe(
         (data) => {
           console.log('Data received:', data);
-          this.volquetes = Object.values(data);
+          this.volquetes = Object.values(data)|| [];;
         },
         (error) => {
           console.error('Error al cargar los volquetes', error);
@@ -92,61 +129,52 @@ export class ListaVolquetesComponent {
     );
   }
 
-  startEdit(volquete: VolqueteModel): void {
-    console.log('StartEdit called');
 
-    this.isAddingNew = false;
-    this.isEditing = true;
 
-    this.editingRow = volquete;
-    this.editTemp = { ...volquete }; // Hago una copia de lo que estamos editando
-  }
 
-  saveEdit(): void {
-    if (this.editTemp) {
-      if (this.isAddingNew) {
-        // Si estamos en modo "Agregar"
-        this.addVolquete(this.editTemp);
-        this.isAddingNew = false; // Resetear el modo "Agregar"
-      } else {
-        if (this.isEditing) {
-          // Modo "Editar"
-          this.subscription.add(
-            this.volqueteService.update(this.editTemp).subscribe({
-              next: () => {
-                this.loadVolquetes(); // Refresh the list
-                this.editingRow = null; // Exit edit mode
-              },
-              error: (error) => {
-                console.error('Error al actualizar el volquete', error);
-              },
-            })
-          );
+
+  onAdd(): void {
+    if (!this.isAddingNew) {
+      // Obtener el ID del TipoVolquete seleccionado desde el formulario
+      const tipoVolqueteIdSeleccionado = this.volqueteForm.get('tipoVolquete')?.value;
+
+      if (tipoVolqueteIdSeleccionado) {
+        // Buscar el tipo de volquete completo a partir del ID seleccionado
+        const tipoVolqueteSeleccionado = this.tipoVolquetes.find(tipo => tipo.id === tipoVolqueteIdSeleccionado);
+
+        if (tipoVolqueteSeleccionado) {
+          this.volqueteService.getMaxId().subscribe({
+            next: (maxVolquete: VolqueteModel) => {
+              // Crear un nuevo objeto Volquete con el TipoVolquete completo
+              const newVolquete: VolqueteModel = {
+                id: maxVolquete.id + 1,
+                marca: this.volqueteForm.get('marca')?.value,
+                fecha_compra: this.volqueteForm.get('fecha_compra')?.value,
+                fecha_fabricacion: this.volqueteForm.get('fecha_fabricacion')?.value,
+                TipoVolquete: tipoVolqueteSeleccionado,  // Asignar el objeto completo
+              };
+              this.volquetes.push(newVolquete); // Agregar a la lista de volquetes
+              this.isAddingNew = false;
+              this.volqueteForm.reset(); // Limpiar formulario
+              console.log('Agregando nuevo volquete');
+            },
+            error: (err) => {
+              console.error('Error al agregar nuevo volquete', err);
+            },
+          });
+        } else {
+          console.error('Tipo de volquete no encontrado');
         }
+      } else {
+        console.error('Por favor seleccione un tipo de volquete');
       }
     }
   }
 
-  cancelEdit(): void {
-    this.isAddingNew = false;
-    this.isEditing = false;
-    this.editingRow = null; // Exit edit mode
-  }
 
-  onAdd(): void {
-    const newVolquete: VolqueteModel = {
-      id: 0,
-      tipoVolquete: new TipoVolqueteModel,
-      fecha_compra: new Date(),
-      fecha_fabricacion: new Date(),
-      marca: '',
-    };
-    this.volquetes.push(newVolquete);
-    this.startEdit(newVolquete);
-    //this.tiposVolqueteFormListService.startAdding();
-    this.isAddingNew = true;
-    console.log('you pressed onAddProveedor in volquete-list.component');
-  }
+
+
+
 
   addVolquete(tipo: VolqueteModel): void {
     this.subscription.add(
@@ -172,4 +200,53 @@ export class ListaVolquetesComponent {
     // ); /*Servicio para marcar al tipo como "Selected" */
     console.log('Row clicked:', tipo);
   }
+
+  // Método de edición de un Volquete
+  startEdit(volquete: VolqueteModel): void {
+    this.isEditing = true;
+    this.isAddingNew = false;
+    this.editTemp = { ...volquete }; // Guardar el volquete a editar
+
+    // Rellenar el formulario con los datos del volquete
+    this.volqueteForm.patchValue({
+      marca: volquete.marca,
+      fecha_fabricacion: volquete.fecha_fabricacion,
+      fecha_compra: volquete.fecha_compra,
+      tipoVolquete: volquete.TipoVolquete.id,
+    });
+  }
+
+   // Guardar cambios de edición
+   saveEdit(): void {
+    if (this.volqueteForm.valid && this.editTemp) {
+      const editedVolquete = { ...this.editTemp, ...this.volqueteForm.value };
+      const index = this.volquetes.findIndex(v => v.id === editedVolquete.id);
+      if (index !== -1) {
+        this.volquetes[index] = editedVolquete;
+      }
+      this.isEditing = false;
+      this.volqueteForm.reset(); // Limpiar formulario
+    }
+  }
+
+  // Método para cancelar edición
+  cancelEdit(): void {
+    this.isEditing = false;
+    this.isAddingNew = false;
+    this.volqueteForm.reset();
+  }
+
+  getTipo(id: number): Observable<TipoVolqueteModel> {
+    return this.tipoVolqueteService.getTipo(id);
+  }
+
+    // Método que manejará el envío del formulario
+    onSubmit(): void {
+      if (this.volqueteForm.valid) {
+        console.log("Formulario enviado con éxito:", this.volqueteForm.value);
+        // Aquí podrías hacer algo como enviar los datos al servidor
+      } else {
+        console.log("Formulario no válido");
+      }
+    }
 }
