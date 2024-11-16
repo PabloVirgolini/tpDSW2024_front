@@ -17,7 +17,7 @@ import { AuthService } from '../../../../services/authService/auth.service.js';
 import {Observer} from 'rxjs';
 
 @Component({
-  standalone:true,
+  standalone: true,
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
@@ -41,19 +41,19 @@ export class LoginComponent implements OnInit {
     private userService: UsuariosService,
     public dialogRef: MatDialogRef<LoginComponent>,
     public ngxService: NgxUiLoaderService,
-    private snackbarService: SnackbarService, 
+    private snackbarService: SnackbarService,
     private authService: AuthService
-  ) {    this.loginForm = this.formBuilder.group({
-    nombreUsuario: [null, [Validators.required]],
-    password: [null, Validators.required],
-  });
-  this.responseMessage = '';
-}
-
-  ngOnInit(): void {
+  ) {
+    this.loginForm = this.formBuilder.group({
+      nombreUsuario: [null, [Validators.required]],
+      password: [null, Validators.required],
+    });
+    this.responseMessage = '';
   }
-  
-  reloadPage(){
+
+  ngOnInit(): void {}
+
+  reloadPage() {
     window.location.reload();
   }
 
@@ -67,24 +67,28 @@ export class LoginComponent implements OnInit {
     };
 
     //Primero definimos el Observer completo y después nos suscribimos.
-    const observer: Observer<any>={
-      next:(response)=>{
-          this.ngxService.stop();
-          this.dialogRef.close();
-           // En el service esto hace que se emita un cambio (next) que debería ser escuchado y actualizar la pagina
-          //localStorage.setItem('token', response.token); --> esto lo hace el authService.setUser
-          this.authService.setUser(formData.nombreUsuario, response.token);
-          this.router.navigate(['/']);
-          this.reloadPage();
-        },
-        error: (error) => {
-          this.ngxService.stop();
-          this.responseMessage = error.error?.message || GlobalConstants.genericError;
-          this.snackbarService.openSnackBar(this.responseMessage, GlobalConstants.error);
-        },
-        complete: ()=>console.log('Login request completed'),
+    const observer: Observer<any> = {
+      next: (response) => {
+        this.ngxService.stop();
+        this.dialogRef.close();
+        // En el service esto hace que se emita un cambio (next) que debería ser escuchado y actualizar la pagina
+        //localStorage.setItem('token', response.token); --> esto lo hace el authService.setUser
+        this.authService.setUser(formData.nombreUsuario, response.token);
+        this.router.navigate(['/']);
+        this.reloadPage();
+      },
+      error: (error) => {
+        this.ngxService.stop();
+        this.responseMessage =
+          error.error?.message || GlobalConstants.genericError;
+        this.snackbarService.openSnackBar(
+          this.responseMessage,
+          GlobalConstants.error
+        );
+      },
+      complete: () => console.log('Login request completed'),
     };
-    
+
     // Finalmente se llama al método LOGIN del servicio USUARIOSSERVICE para
     // enviar la solicitud de incio de sesión con los datos del formulario.
     this.userService.login(data).subscribe(observer);
@@ -93,5 +97,38 @@ export class LoginComponent implements OnInit {
     // Para la animación de carga, cierra el cuadro de diálogo, guarda el token
     // recibido en el localStorage para futuras solicitudes, y dirige al usuario
     // a la página principal "(/)"
+  }
+
+ recoverPassword() {
+  const email = this.loginForm.get('nombreUsuario')?.value;
+
+  if (!email) {
+    this.snackbarService.openSnackBar(
+      'Por favor, ingrese su correo electrónico para recuperar la contraseña.',
+      GlobalConstants.error
+    );
+    return;
+  }
+  this.ngxService.start();
+
+  const observer: Observer<any> = {
+    next: (response) => {
+      this.ngxService.stop();
+      this.snackbarService.openSnackBar(
+        response.message || 'Correo enviado exitosamente. Revisa tu bandeja.',
+        GlobalConstants.success
+      );
+    },
+    error: (error) => {
+      this.ngxService.stop();
+      this.responseMessage = error.error?.message || GlobalConstants.genericError;
+      this.snackbarService.openSnackBar(
+        this.responseMessage,
+        GlobalConstants.error
+      );
+    },
+    complete: () => console.log('Recover password request completed'),
+  };
+    this.userService.recoverPassword({ email }).subscribe(observer);
   }
 }

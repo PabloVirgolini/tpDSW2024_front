@@ -70,7 +70,12 @@
 
       <!-- Tipo Volquete -->
       <label for="TipoVolquete">Id del Tipo Volquete:</label>
-      <input id="TipoVolquete" [(ngModel)]="editTemp!.TipoVolquete.id" name="id" required placeholder="Ej: 1" />
+      <input id="TipoVolquete" 
+        [(ngModel)]="editTemp!.TipoVolquete.id" 
+        name="id"
+        required 
+        placeholder="Ej: 1" 
+        />
 
         <!-- Botones -->
         <button type="submit">{{ isAddingNew ? 'Agregar' : 'Guardar' }}</button>
@@ -78,4 +83,4 @@
       </form>
     </div>
   </div>
-</div>
+

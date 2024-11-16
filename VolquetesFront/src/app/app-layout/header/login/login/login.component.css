@@ -11,3 +11,19 @@
 mat-form-field {
   padding: 5px;
 }
+
+.forgot-password {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.forgot-password a {
+  color: #1976d2;
+  /* Primary color */
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}

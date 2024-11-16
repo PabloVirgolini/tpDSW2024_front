@@ -109,4 +109,19 @@ export class UsuariosService {
       .get(`${this.apiUrl}/checkToken`, { headers })
       .pipe(catchError(this.handleError<any>('checkToken')));
   }
+
+  recoverPassword(data: { email: string }) {
+    return this.http
+      .post(`${this.apiUrl}/recoverpassword`, data, {
+        headers: new HttpHeaders().set('Content-Type', 'application/json'),
+      })
+      .pipe(
+        tap((response: any) => {
+          if (response.message) {
+            console.log(`Recover password success: ${response.message}`);
+          }
+        }),
+        catchError(this.handleError<any>('recoverPassword'))
+      );
+  }
 }

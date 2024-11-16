@@ -2,7 +2,12 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { VolqueteModel } from '../../../../../../../../VolquetesFront/src/app/model/interfaces/volquete.interface.js'
 import { Volquete } from '../../../../../../../../VolquetesFront/src/app/model/interfaces/volquete.interface.js';
-import { FormsModule, FormBuilder, FormGroup,Validators  } from '@angular/forms';
+import {
+  ReactiveFormsModule, FormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { VolqueteService } from     '../../../../../services/volqueteService/volquete.service.js';
@@ -17,7 +22,7 @@ export class TuModulo { }
 @Component({
   selector: 'app-lista-volquetes',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
   templateUrl: './lista-volquetes.component.html',
   styleUrl: './lista-volquetes.component.css',
 })
@@ -52,23 +57,21 @@ export class ListaVolquetesComponent {
     tipoVolquete: 'Tipo Volquete',
   };
 
-
   private subscription = new Subscription();
 
   constructor(
     private fb: FormBuilder,
     private volqueteService: VolqueteService,
     private tipoVolqueteService: TiposVolqueteService,
-    private VolqueteFormListService: VolqueteBodyService,
-
+    private VolqueteFormListService: VolqueteBodyService
   ) {
-      // Inicializamos el formulario con los controles
-      this.volqueteForm = this.fb.group({
-        marca: ['', Validators.required], // Marca con validación requerida
-        fecha_fabricacion: ['', Validators.required], // Fecha de fabricación
-        fecha_compra: ['', Validators.required], // Fecha de compra
-        tipoVolquete: [null, Validators.required], // Tipo de volquete con validación
-        });
+    // Inicializamos el formulario con los controles
+    this.volqueteForm = this.fb.group({
+      marca: ['', Validators.required], // Marca con validación requerida
+      fecha_fabricacion: ['', Validators.required], // Fecha de fabricación
+      fecha_compra: ['', Validators.required], // Fecha de compra
+      tipoVolquete: [null, Validators.required], // Tipo de volquete con validación
+    });
   }
 
   ngOnInit(): void {
@@ -79,7 +82,7 @@ export class ListaVolquetesComponent {
       marca: ['', Validators.required],
       fecha_fabricacion: ['', Validators.required],
       fecha_compra: ['', Validators.required],
-      tipoVolquete: ['', Validators.required]
+      tipoVolquete: ['', Validators.required],
     });
   }
 
@@ -100,7 +103,7 @@ export class ListaVolquetesComponent {
       this.volqueteService.volquetes$.subscribe(
         (data) => {
           console.log('Data received:', data);
-          this.volquetes = Object.values(data)|| [];;
+          this.volquetes = Object.values(data) || [];
         },
         (error) => {
           console.error('Error al cargar los volquetes', error);
@@ -129,18 +132,17 @@ export class ListaVolquetesComponent {
     );
   }
 
-
-
-
-
   onAdd(): void {
     if (!this.isAddingNew) {
       // Obtener el ID del TipoVolquete seleccionado desde el formulario
-      const tipoVolqueteIdSeleccionado = this.volqueteForm.get('tipoVolquete')?.value;
+      const tipoVolqueteIdSeleccionado =
+        this.volqueteForm.get('tipoVolquete')?.value;
 
       if (tipoVolqueteIdSeleccionado) {
         // Buscar el tipo de volquete completo a partir del ID seleccionado
-        const tipoVolqueteSeleccionado = this.tipoVolquetes.find(tipo => tipo.id === tipoVolqueteIdSeleccionado);
+        const tipoVolqueteSeleccionado = this.tipoVolquetes.find(
+          (tipo) => tipo.id === tipoVolqueteIdSeleccionado
+        );
 
         if (tipoVolqueteSeleccionado) {
           this.volqueteService.getMaxId().subscribe({
@@ -150,8 +152,9 @@ export class ListaVolquetesComponent {
                 id: maxVolquete.id + 1,
                 marca: this.volqueteForm.get('marca')?.value,
                 fecha_compra: this.volqueteForm.get('fecha_compra')?.value,
-                fecha_fabricacion: this.volqueteForm.get('fecha_fabricacion')?.value,
-                TipoVolquete: tipoVolqueteSeleccionado,  // Asignar el objeto completo
+                fecha_fabricacion:
+                  this.volqueteForm.get('fecha_fabricacion')?.value,
+                TipoVolquete: tipoVolqueteSeleccionado, // Asignar el objeto completo
               };
               this.volquetes.push(newVolquete); // Agregar a la lista de volquetes
               this.isAddingNew = false;
@@ -170,11 +173,6 @@ export class ListaVolquetesComponent {
       }
     }
   }
-
-
-
-
-
 
   addVolquete(tipo: VolqueteModel): void {
     this.subscription.add(
@@ -216,11 +214,11 @@ export class ListaVolquetesComponent {
     });
   }
 
-   // Guardar cambios de edición
-   saveEdit(): void {
+  // Guardar cambios de edición
+  saveEdit(): void {
     if (this.volqueteForm.valid && this.editTemp) {
       const editedVolquete = { ...this.editTemp, ...this.volqueteForm.value };
-      const index = this.volquetes.findIndex(v => v.id === editedVolquete.id);
+      const index = this.volquetes.findIndex((v) => v.id === editedVolquete.id);
       if (index !== -1) {
         this.volquetes[index] = editedVolquete;
       }
@@ -240,13 +238,13 @@ export class ListaVolquetesComponent {
     return this.tipoVolqueteService.getTipo(id);
   }
 
-    // Método que manejará el envío del formulario
-    onSubmit(): void {
-      if (this.volqueteForm.valid) {
-        console.log("Formulario enviado con éxito:", this.volqueteForm.value);
-        // Aquí podrías hacer algo como enviar los datos al servidor
-      } else {
-        console.log("Formulario no válido");
-      }
+  // Método que manejará el envío del formulario
+  onSubmit(): void {
+    if (this.volqueteForm.valid) {
+      console.log('Formulario enviado con éxito:', this.volqueteForm.value);
+      // Aquí podrías hacer algo como enviar los datos al servidor
+    } else {
+      console.log('Formulario no válido');
     }
+  }
 }
