@@ -45,6 +45,17 @@ export class UsuariosService {
       .pipe(catchError(this.handleError<Usuario>('getTipo')));
   }
 
+  getEmailByUsername(data: { nombreUsuario: string }) {
+    return this.http
+      .post(`${this.apiUrl}/getEmailByUsername`, data, {
+        headers: new HttpHeaders().set('Content-Type', 'application/json'),
+      })
+      .pipe(
+        map((response: any) => response), // Mapear la respuesta si necesitas adaptar el formato
+        catchError(this.handleError<any>('getEmailByUsername'))
+      );
+  }
+
   add(auxUser: Usuario): Observable<Usuario> {
     if (!auxUser.nombre_usuario) {
       throw new Error('Falta indicar el nombre');

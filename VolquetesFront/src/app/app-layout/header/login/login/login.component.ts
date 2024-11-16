@@ -100,35 +100,56 @@ export class LoginComponent implements OnInit {
   }
 
  recoverPassword() {
-  const email = this.loginForm.get('nombreUsuario')?.value;
+   const nombreUsuario = this.loginForm.get('nombreUsuario')?.value;
 
-  if (!email) {
-    this.snackbarService.openSnackBar(
-      'Por favor, ingrese su correo electrónico para recuperar la contraseña.',
-      GlobalConstants.error
-    );
-    return;
-  }
-  this.ngxService.start();
+   if (!nombreUsuario) {
+     this.snackbarService.openSnackBar(
+       'Por favor, ingrese su usuario para recuperar la contraseña.',
+       GlobalConstants.error
+     );
+     return;
+   }
+   this.ngxService.start();
 
-  const observer: Observer<any> = {
+    this.userService.getEmailByUsername({ nombreUsuario }).subscribe({
     next: (response) => {
-      this.ngxService.stop();
-      this.snackbarService.openSnackBar(
-        response.message || 'Correo enviado exitosamente. Revisa tu bandeja.',
-        GlobalConstants.success
-      );
+      console.log(response); // Verifica la estructura de la respuesta
+      const email = response?.email;
+
+      if (!email) {
+        this.ngxService.stop();
+        this.snackbarService.openSnackBar(
+          'No se encontró un correo asociado al usuario ingresado.',
+          GlobalConstants.error
+        );
+        return;
+      }
+
+      // Ahora llama al servicio para recuperar la contraseña
+      this.userService.recoverPassword({ email }).subscribe({
+        next: (response) => {
+          this.ngxService.stop();
+          this.snackbarService.openSnackBar(
+            response.message || 'Correo enviado exitosamente. Revisa tu bandeja.',
+            GlobalConstants.success
+          );
+        },
+        error: (error) => {
+          this.ngxService.stop();
+          this.snackbarService.openSnackBar(
+            error.error?.message || GlobalConstants.genericError,
+            GlobalConstants.error
+          );
+        },
+      });
     },
     error: (error) => {
       this.ngxService.stop();
-      this.responseMessage = error.error?.message || GlobalConstants.genericError;
       this.snackbarService.openSnackBar(
-        this.responseMessage,
+        error.error?.message || 'No se pudo encontrar el usuario.',
         GlobalConstants.error
       );
     },
-    complete: () => console.log('Recover password request completed'),
-  };
-    this.userService.recoverPassword({ email }).subscribe(observer);
+  });
   }
 }
