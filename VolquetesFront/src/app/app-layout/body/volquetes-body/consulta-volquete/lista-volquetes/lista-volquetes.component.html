@@ -14,7 +14,7 @@
       <tbody>
         <tr *ngFor="let volquete of volquetes" (click)="onSeleccionarTipo(volquete)">
           <td><span>{{ volquete.id }}</span></td>
-          <td><span>{{ volquete.TipoVolquete.descripcion_tipo_volquete }}</span></td>
+          <td><span>{{ volquete.tipoVolquete.descripcion_tipo_volquete }}</span></td>
           <td><span>{{ volquete.marca }}</span></td>
           <td><span>{{ volquete.fecha_fabricacion | date: 'dd/MM/yyyy' }}</span></td>
           <td><span>{{ volquete.fecha_compra | date: 'dd/MM/yyyy' }}</span></td>
@@ -55,7 +55,7 @@
 
       <!-- Tipo Volquete -->
       <label for="TipoVolquete">Id del Tipo Volquete:</label>
-      <input id="TipoVolquete" [(ngModel)]="editTemp!.TipoVolquete.id" name="id" required placeholder="Ej: 1" />
+      <input id="TipoVolquete" [(ngModel)]="editTemp!.tipoVolquete.id" name="id" required placeholder="Ej: 1" />
 
       <!-- Botones -->
       <button type="submit">{{ isAddingNew ? 'Agregar' : 'Guardar' }}</button>

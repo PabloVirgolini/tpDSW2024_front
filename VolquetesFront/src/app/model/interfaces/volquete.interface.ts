@@ -3,7 +3,7 @@ import { TipoVolquete, TipoVolqueteModel } from './tipo_volquete.interface.js';
 
 export interface Volquete {
   id: number;
-  TipoVolquete: TipoVolquete;
+  tipoVolquete: TipoVolquete;
   fecha_compra: Date;
   fecha_fabricacion: Date;
   marca: string;
@@ -11,7 +11,7 @@ export interface Volquete {
 
 export class VolqueteModel implements Volquete {
   id: number;
-  TipoVolquete:TipoVolqueteModel;
+  tipoVolquete:TipoVolqueteModel;
   fecha_compra: Date;
   fecha_fabricacion: Date;
   marca: string;
@@ -28,6 +28,6 @@ export class VolqueteModel implements Volquete {
     this.fecha_compra = fecha_compra;
     this.fecha_fabricacion = fecha_fabricacion;
     this.marca = marca;
-    this.TipoVolquete=TipoVolquete;
+    this.tipoVolquete=TipoVolquete;
   }
 }

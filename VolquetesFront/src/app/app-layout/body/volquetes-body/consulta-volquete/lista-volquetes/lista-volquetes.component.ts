@@ -26,7 +26,7 @@ export class ListaVolquetesComponent {
     'marca',
     'fecha_fabricacion',
     'fecha_compra',
-    'TipoVolquete',
+    'tipoVolquete',
   ];
 
   getColspan(): number {
@@ -38,7 +38,7 @@ export class ListaVolquetesComponent {
     marca: 'Marca',
     fecha_fabricacion: 'Fecha de Fabricacion',
     fecha_compra: 'Fecha de Compra',
-    TipoVolquete: 'Tipo Volquete',
+    tipoVolquete: 'Tipo Volquete',
   };
 
   volqueteSeleccionado: VolqueteModel | null = null;
@@ -136,7 +136,7 @@ export class ListaVolquetesComponent {
   onAdd(): void {
     const newVolquete: VolqueteModel = {
       id: 0,
-      TipoVolquete: new TipoVolqueteModel,
+      tipoVolquete: new TipoVolqueteModel,
       fecha_compra: new Date(),
       fecha_fabricacion: new Date(),
       marca: '',
