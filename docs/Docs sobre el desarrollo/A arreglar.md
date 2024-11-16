@@ -60,4 +60,6 @@ Falta que el usuario se logee
 
     g. Quiero filtrar por tipo y por estado
 
+    h. Al AGREGAR o EDITAR un volquete se pide la ID del tipoVolquete. Hay que hacer como en USUARIOS cuando piden el ROL: Pedir la DESCRIPCION y de ahí obtener la ID del tipo.
+
     
