@@ -29,24 +29,40 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const token = localStorage.getItem('token');
-
+    //Me suscribo a los cambios de Auth
     this.authSubscription = this.authService.authenticatedUser$.subscribe(
       (nombre) => {
         this.nombreUsuario = nombre;
       }
     );
+
+    const token = localStorage.getItem('token');
     if (token) {
       this.userService.checkToken().subscribe({
-        next: (response: any) => {
-          this.router.navigate(['/']);
+        next: (response) => {
+          if (response && response.user) {
+            this.authService.updateUser(response.user);
+          }else{
+            console.log('Formato no esperado:', response);
+            this.handleAuthError();
+          }
         },
-        error: (error: any) => {
+        error: (error) => {
           console.error('Token check failed:', error);
-          // Aquí hay que redirigir al login cuando lo tengamos armado
+          //El token es invalido
+          this.handleAuthError();
         },
       });
+    } else {
+      this.handleAuthError();
     }
+  }
+
+  private handleAuthError(): void {
+    localStorage.removeItem('token');
+    this.authService.clearUser();
+    this.nombreUsuario = null;
+    this.router.navigate(['/login']);
   }
 
   ngOnDestroy(): void {
@@ -62,9 +78,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.dialog.open(LoginComponent, dialogConfig);
   }
 
-  logout() {
+  logout():void {
+    localStorage.removeItem('token');
     this.authService.clearUser();
     this.nombreUsuario = null;
+    this.router.navigate(['/']);
     this.reloadPage();
   }
 

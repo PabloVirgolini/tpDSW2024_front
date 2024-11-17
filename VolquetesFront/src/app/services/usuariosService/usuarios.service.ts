@@ -115,9 +115,13 @@ export class UsuariosService {
 
   checkToken(): Observable<any> {
     const token = localStorage.getItem('token');
+    if(!token){
+      console.log("No token");
+    }
+
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http
-      .get(`${this.apiUrl}/checkToken`, { headers })
+    
+    return this.http.get(`${this.apiUrl}/checkToken`, { headers })
       .pipe(catchError(this.handleError<any>('checkToken')));
   }
 
