@@ -17,6 +17,7 @@ export class AuthService {
   }
 
   public isAuthenticated(): boolean {
+    this.loadUser();
     return this.authStatus.value;
   }
 
@@ -24,18 +25,22 @@ export class AuthService {
     localStorage.setItem('nombre_usuario', nombreUsuario);
     localStorage.setItem('token', token);
     this.authenticatedUser.next(nombreUsuario);
-    this.authStatus.next(true); //emitimos el nombre del usuario arriba y aca true.
+    this.authStatus.next(true);
   }
-  public updateUser(user: any): void {
-    if (user && user.nombre) {
-      this.authenticatedUser.next(user.nombre);
+
+  public updateUser(user: { nombre_usuario: string }): void {
+    if (user && user.nombre_usuario) {
+      this.authenticatedUser.next(user.nombre_usuario);
       this.authStatus.next(true);
-      localStorage.setItem('nombre_usuario', user.nombre);
+      localStorage.setItem('nombre_usuario', user.nombre_usuario);
+    } else {
+      console.error('Invalid user data provided to updateUser');
+      this.clearUser();
     }
   }
   public clearUser() {
     this.authenticatedUser.next(null);
-     this.authStatus.next(false);
+    this.authStatus.next(false);
     localStorage.removeItem('nombre_usuario');
     localStorage.removeItem('token');
   }

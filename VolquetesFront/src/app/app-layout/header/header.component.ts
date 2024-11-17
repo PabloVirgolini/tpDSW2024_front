@@ -40,9 +40,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (token) {
       this.userService.checkToken().subscribe({
         next: (response) => {
-          if (response && response.user) {
-            this.authService.updateUser(response.user);
-          }else{
+          if (response?.valid && response.user) {
+            // validamos el token con el backend. Nos devuelve los datos del usuario
+            this.authService.setUser(response.user.nombre_usuario, token);
+            //this.authService.updateUser(response.user);
+          } else {
             console.log('Formato no esperado:', response);
             this.handleAuthError();
           }
@@ -59,10 +61,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private handleAuthError(): void {
+    this.clearUserData();
+    this.router.navigate(['/login']);
+  }
+
+  private clearUserData(): void {
     localStorage.removeItem('token');
     this.authService.clearUser();
     this.nombreUsuario = null;
-    this.router.navigate(['/login']);
   }
 
   ngOnDestroy(): void {
@@ -78,10 +84,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.dialog.open(LoginComponent, dialogConfig);
   }
 
-  logout():void {
-    localStorage.removeItem('token');
-    this.authService.clearUser();
-    this.nombreUsuario = null;
+  logout(): void {
     this.router.navigate(['/']);
     this.reloadPage();
   }

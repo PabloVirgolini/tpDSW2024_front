@@ -113,16 +113,36 @@ export class UsuariosService {
       );
   }
 
-  checkToken(): Observable<any> {
+  checkToken(): Observable<{ valid: boolean; user: { nombre_usuario: string } } | null> {
     const token = localStorage.getItem('token');
+    
     if(!token){
       console.log("No token");
+      return of(null); //devolvemos un valor observable para indicar que no hay token
     }
-
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
     
-    return this.http.get(`${this.apiUrl}/checkToken`, { headers })
-      .pipe(catchError(this.handleError<any>('checkToken')));
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const url = '/api/authentication/checkToken';
+    
+    return this.http
+      .get<{ valid: boolean; user: { nombre_usuario: string } }>(this.apiUrl, {
+        headers,
+      })
+      .pipe(
+        map((response) => {
+          if (response && response.valid && response.user) {
+            return response;
+          } else {
+            console.error('Unexpected response format', response);
+            return null;
+          }
+        }),
+        catchError((error) => {
+          console.error('Error in checkToken:', error);
+          // Retorna null en caso de error.
+          return of(null);
+        })
+      );
   }
 
   recoverPassword(data: { email: string }) {
