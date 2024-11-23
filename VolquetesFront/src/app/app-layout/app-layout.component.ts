@@ -24,18 +24,27 @@ import { AuthService } from '../services/authService/auth.service.js';
   templateUrl: './app-layout.component.html',
   styleUrl: './app-layout.component.css',
 })
-export class AppLayoutComponent implements OnDestroy {
+export class AppLayoutComponent implements OnDestroy, OnInit {
   public showFooter = false;
-  private scrollSubscription: Subscription;
-  isAuthenticated = false;
-
+  private scrollSubscription!: Subscription;
   private authSubscription: Subscription | null = null;
+
+  public isAuthenticated = false;
   nombreUsuario: string | null = null;
 
   constructor(
     private scrollService: ScrollService,
     private authService: AuthService
-  ) {
+  ) {}
+
+  ngOnInit(): void {
+    this.isAuthenticated = this.authService.isAuthenticated();
+    this.authSubscription = this.authService.authenticatedUser$.subscribe(
+      (nombre) => {
+        this.nombreUsuario = nombre;
+      }
+    );
+    
     this.scrollSubscription = this.scrollService.scrollDirection$.subscribe(
       (event) => {
         this.onScrollDirection(event);
@@ -48,14 +57,6 @@ export class AppLayoutComponent implements OnDestroy {
     if (this.authSubscription) {
       this.authSubscription.unsubscribe();
     }
-  }
-  ngOnInit(): void {
-    this.isAuthenticated = this.authService.isAuthenticated();
-    this.authSubscription = this.authService.authenticatedUser$.subscribe(
-      (nombre) => {
-        this.nombreUsuario = nombre;
-      }
-    );
   }
 
   onScrollDirection(event: string) {
