@@ -129,6 +129,8 @@ export class UsuariosService {
         headers,
       })
       .pipe(
+        tap((response) => console.log('checkToken response:', response)), // Log completo de la respuesta
+
         map((response) => {
           if (response && response.valid && response.user) {
             return response;
