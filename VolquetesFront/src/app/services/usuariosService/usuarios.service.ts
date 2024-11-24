@@ -31,9 +31,9 @@ export class UsuariosService {
   }
 
   getAll(): Observable<Usuario[]> {
-    console.log('getAll called');
+    //console.log('getAll called');
     return this.http.get<{ data: Usuario[] }>(this.apiUrl).pipe(
-      tap((response) => console.log('Response from backend:', response)), // Log completo
+      // tap((response) => console.log('Response from backend:', response)), // Log completo
       map((response) => response.data || []),
       catchError(this.handleError<Usuario[]>('getAll', []))
     );
@@ -126,7 +126,7 @@ export class UsuariosService {
     const url = '/api/authentication/checkToken';
     
     return this.http
-      .get<{ valid: boolean; user: { nombre_usuario: string } }>(this.apiUrl, {
+      .get<{ valid: boolean; user: { nombre_usuario: string } }>(url, {
         headers,
       })
       .pipe(
