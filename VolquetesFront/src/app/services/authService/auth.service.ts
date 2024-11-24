@@ -53,7 +53,7 @@ export class AuthService {
     const nombreUsuario = localStorage.getItem('nombre_usuario');
     const token = localStorage.getItem('token');
 
-    console.log('loadUser: token =', token, 'nombreUsuario =', nombreUsuario);
+    // console.log('loadUser: token =', token, 'nombreUsuario =', nombreUsuario);
 
 
     if (token && nombreUsuario) {

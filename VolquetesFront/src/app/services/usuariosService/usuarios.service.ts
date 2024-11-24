@@ -104,6 +104,7 @@ export class UsuariosService {
       })
       .pipe(
         tap((response: any) => {
+          console.log("usuarios.service response: ", response)
           if (response.token && response.nombre_usuario) {
             localStorage.setItem('token', response.token);
             this.authService.setUser(response.nombre_usuario, response.token);
