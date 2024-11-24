@@ -6,7 +6,6 @@ import { AppLayoutComponent } from './app-layout/app-layout.component.js';
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet, RouterLink,
     AppLayoutComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
