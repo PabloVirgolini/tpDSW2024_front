@@ -71,8 +71,8 @@
       <!-- Tipo Volquete -->
       <label for="TipoVolquete">Id del Tipo Volquete:</label>
       <input id="TipoVolquete" 
-       formControlName="tipoVolqueteId" 
-        
+        [(ngModel)]="editTemp!.TipoVolquete.id" 
+        name="id"
         required 
         placeholder="Ej: 1" 
         />

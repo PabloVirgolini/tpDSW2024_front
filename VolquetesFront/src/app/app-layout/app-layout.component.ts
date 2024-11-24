@@ -41,7 +41,6 @@ export class AppLayoutComponent implements OnDestroy, OnInit {
     this.isAuthenticated = this.authService.isAuthenticated();
     this.authSubscription = this.authService.authenticatedUser$.subscribe(
       (nombre) => {
-        console.log("Nombre de usuario: " , nombre);
         this.nombreUsuario = nombre;
       }
     );
