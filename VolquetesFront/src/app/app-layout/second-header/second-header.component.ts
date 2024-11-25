@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../services/authService/auth.service.js';
 
 @Component({
   selector: 'app-second-header',
@@ -7,6 +9,28 @@ import { Component } from '@angular/core';
   templateUrl: './second-header.component.html',
   styleUrl: './second-header.component.css'
 })
-export class SecondHeaderComponent {
-  tipoUsuario:string = "Menu Administrador";
+export class SecondHeaderComponent implements OnInit, OnDestroy{
+  
+  private authSubscription: Subscription | null = null;
+  tipoUsuario:string | null = null;
+  
+  constructor(
+    private authService: AuthService
+  ){}
+
+  ngOnInit(): void {
+    //Me suscribo a los cambios de Auth
+    this.authSubscription = this.authService.authenticatedUser$.subscribe(
+      (rol) => {
+        this.tipoUsuario = rol;
+      }
+    );
+  }
+
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+  }
+
 }
