@@ -36,51 +36,50 @@
   </div>
 </div>
 
-  <!-- Modal para agregar o editar volquete -->
-  <div *ngIf="isAddingNew || isEditing" class="modal">
-    <div class="modal-content">
-      <h2>{{ isAddingNew ? 'Agregar Volquete' : 'Editar Volquete' }}</h2>
-      <form [formGroup]="volqueteForm" (ngSubmit)="onSubmit()">
-        <!-- Marca -->
-        <label for="marca">Marca Volquete:</label>
-        <input
-          id="marca"
-          formControlName="marca"
-          required
-          placeholder="Ej: Hitachi"
-        />
+<!-- Modal para agregar o editar volquete -->
+<div *ngIf="isAddingNew || isEditing" class="modal">
+  <div class="modal-content">
+    <h2>{{ isAddingNew ? 'Agregar Volquete' : 'Editar Volquete' }}</h2>
+    <form [formGroup]="volqueteForm" (ngSubmit)="onSubmit()">
+      <!-- Marca -->
+      <label for="marca">Marca Volquete:</label>
+      <input
+        id="marca"
+        formControlName="marca"
+        required
+        placeholder="Ej: Hitachi"
+      />
 
-        <!-- Fecha Fabricacion -->
-        <label for="fecha_fabricacion">Fecha Fabricacion:</label>
-        <input
-          id="fecha_fabricacion"
-          formControlName="fecha_fabricacion"
-          required
-          type="date"
-        />
+      <!-- Fecha Fabricacion -->
+      <label for="fecha_fabricacion">Fecha Fabricación:</label>
+      <input
+        id="fecha_fabricacion"
+        formControlName="fecha_fabricacion"
+        required
+        type="date"
+      />
 
-        <!-- Fecha Compra -->
-        <label for="fecha_compra">Fecha Compra:</label>
-        <input
-          id="fecha_compra"
-          formControlName="fecha_compra"
-          required
-          type="date"
-        />
+      <!-- Fecha Compra -->
+      <label for="fecha_compra">Fecha Compra:</label>
+      <input
+        id="fecha_compra"
+        formControlName="fecha_compra"
+        required
+        type="date"
+      />
 
       <!-- Tipo Volquete -->
-      <label for="TipoVolquete">Id del Tipo Volquete:</label>
-      <input id="TipoVolquete" 
-        [(ngModel)]="editTemp!.TipoVolquete.id" 
-        name="id"
-        required 
-        placeholder="Ej: 1" 
-        />
+      <label for="tipoVolquete">Tipo de Volquete:</label>
+      <select id="tipoVolquete" formControlName="tipoVolquete" required>
+        <option value="" disabled selected>Seleccione un Tipo de Volquete</option>
+        <option *ngFor="let tipo of tipoVolquetes" [value]="tipo.id">
+          {{ tipo.descripcion_tipo_volquete }}
+        </option>
+      </select>
 
-        <!-- Botones -->
-        <button type="submit">{{ isAddingNew ? 'Agregar' : 'Guardar' }}</button>
-        <button type="button" (click)="cancelEdit()">Cancelar</button>
-      </form>
-    </div>
+      <!-- Botones -->
+      <button type="submit">{{ isAddingNew ? 'Agregar' : 'Guardar' }}</button>
+      <button type="button" (click)="cancelEdit()">Cancelar</button>
+    </form>
   </div>
-
+</div>

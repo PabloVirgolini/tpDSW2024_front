@@ -70,7 +70,7 @@ export class ListaVolquetesComponent {
       marca: ['', Validators.required], // Marca con validación requerida
       fecha_fabricacion: ['', Validators.required], // Fecha de fabricación
       fecha_compra: ['', Validators.required], // Fecha de compra
-      tipoVolquete: [null, Validators.required], // Tipo de volquete con validación
+      tipoVolquete: ['', Validators.required], // Tipo de volquete con validación
     });
   }
 
@@ -131,7 +131,7 @@ export class ListaVolquetesComponent {
       })
     );
   }
-
+/*
   onAdd(): void {
     if (!this.isAddingNew) {
       // Obtener el ID del TipoVolquete seleccionado desde el formulario
@@ -172,7 +172,56 @@ export class ListaVolquetesComponent {
         console.error('Por favor seleccione un tipo de volquete');
       }
     }
-  }
+  }*/
+
+    onAdd(): void {
+        // Abrir el formulario para agregar un nuevo volquete
+  this.isAddingNew = true;
+  this.volqueteForm.reset(); // Limpiar el formulario
+  this.volqueteForm.patchValue({ TipoVolquete: null });
+      if (!this.isAddingNew) {
+        // Obtener el ID del TipoVolquete seleccionado desde el formulario
+        const tipoVolqueteIdSeleccionado = this.volqueteForm.get('TipoVolquete')?.value;
+
+        if (tipoVolqueteIdSeleccionado) {
+          // Buscar el tipo de volquete completo a partir del ID seleccionado
+          const tipoVolqueteSeleccionado = this.tipoVolquetes.find(
+            (tipo) => tipo.id === tipoVolqueteIdSeleccionado
+          );
+
+          if (tipoVolqueteSeleccionado) {
+            // Obtener el valor de los campos del formulario
+            const volqueteData: VolqueteModel = {
+              id: this.volqueteForm.get('id')?.value,
+              marca: this.volqueteForm.get('marca')?.value,
+              fecha_compra: this.volqueteForm.get('fecha_compra')?.value,
+              fecha_fabricacion: this.volqueteForm.get('fecha_fabricacion')?.value,
+              TipoVolquete: tipoVolqueteSeleccionado, // Asignar el objeto completo de TipoVolquete
+            };
+
+            // Aquí ya puedes enviar el objeto volqueteData al backend
+            this.volqueteService.add(volqueteData).subscribe({
+              next: (response) => {
+                console.log('Volquete agregado exitosamente', response);
+                this.isAddingNew = false;  // Cerrar el formulario
+                this.volqueteForm.reset(); // Limpiar formulario
+                this.loadVolquetes();      // Recargar lista de volquetes
+              },
+              error: (err) => {
+                console.error('Error al agregar volquete', err);
+              },
+            });
+          } else {
+            console.error('Tipo de volquete no encontrado');
+          }
+        } else {
+          console.error('Por favor seleccione un tipo de volquete');
+        }
+      }
+    }
+
+
+
 
   addVolquete(tipo: VolqueteModel): void {
     this.subscription.add(
@@ -238,13 +287,47 @@ export class ListaVolquetesComponent {
     return this.tipoVolqueteService.getTipo(id);
   }
 
-  // Método que manejará el envío del formulario
   onSubmit(): void {
     if (this.volqueteForm.valid) {
-      console.log('Formulario enviado con éxito:', this.volqueteForm.value);
-      // Aquí podrías hacer algo como enviar los datos al servidor
+      const formValue = this.volqueteForm.value;
+      const tipoVolqueteId = formValue.TipoVolquete;
+
+      if (tipoVolqueteId) {
+        const tipoVolqueteSeleccionado = this.tipoVolquetes.find(
+          (tipo) => tipo.id === tipoVolqueteId
+        );
+
+        if (tipoVolqueteSeleccionado) {
+          const volqueteToSend: Volquete = {
+            id: 0, // Asignar un valor temporal al id, ya que será reemplazado por el backend
+            marca: formValue.marca,
+            fecha_fabricacion: formValue.fecha_fabricacion,
+            fecha_compra: formValue.fecha_compra,
+            TipoVolquete: tipoVolqueteSeleccionado,
+          };
+
+          // Llamada al servicio para enviar el objeto al backend
+          this.volqueteService.add(volqueteToSend).subscribe({
+            next: (response) => {
+              console.log('Volquete agregado exitosamente:', response);
+              this.isAddingNew = false;
+              this.volqueteForm.reset();
+            },
+            error: (err) => {
+              console.error('Error al agregar volquete:', err);
+            },
+          });
+        } else {
+          console.error('Tipo de volquete no encontrado');
+        }
+      } else {
+        console.error('Por favor seleccione un tipo de volquete');
+      }
     } else {
-      console.log('Formulario no válido');
+      console.log('Formulario no válido. Por favor complete todos los campos.');
     }
   }
+
+
+
 }
