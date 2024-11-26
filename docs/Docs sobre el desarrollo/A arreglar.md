@@ -1,5 +1,6 @@
 0.- CheckToken
-    a. Apenas se inicia la página aparece un error:
+    a. (RESUELTO)
+    Apenas se inicia la página aparece un error:
 
     "Failed to laod resorce: the server responded with a status 500".
     :3000/api/users/checkToken:1 
@@ -12,7 +13,11 @@
 
     b. El checkToken no está andando del todo. El AuthService Lo único que se fija es que exista un token, pero no lo valida contra el backend.
 
+    c. Tengo la idea de que pasado un tiempo se hace un checktoken que no funciona, pero se dispara solo. A confirmar.
 
+    d. Ahora el error (a) se transformó en 
+        GET http://localhost:4200/api/usuarios/rol/Camilo 400 (Bad Request)
+        Error al obtener el rol al cargar usuario 
 
 1.- Tipos de Volquete
     a. (RESUELTO)
@@ -24,6 +29,7 @@
 
     d.
     Cuando agrego, si no completo la Descripcion y hago click en Guardar no lo guarda, pero genera un error y no avisa qué problema está teniendo el usuario. Debería manejar el error y dar una alerta para que complete la Descripcion.
+    --> Falta la alerta para el usuario
 
     e. (RESUELTO) Que no te deje borrar un tipo de volquete que se este usando en la clase de VOLQUETE.
         
@@ -60,6 +66,7 @@ Falta que el usuario se logee
 
     g. Quiero filtrar por tipo y por estado
 
-    h. Al AGREGAR o EDITAR un volquete se pide la ID del tipoVolquete. Hay que hacer como en USUARIOS cuando piden el ROL: Pedir la DESCRIPCION y de ahí obtener la ID del tipo.
+    h. (RESUELTO) 
+        Al AGREGAR o EDITAR un volquete se pide la ID del tipoVolquete. Hay que hacer como en USUARIOS cuando piden el ROL: Pedir la DESCRIPCION y de ahí obtener la ID del tipo.
 
     

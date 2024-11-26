@@ -73,11 +73,14 @@ export class LoginComponent implements OnInit {
         this.dialogRef.close();
         // En el service esto hace que se emita un cambio (next) que debería ser escuchado y actualizar la pagina
         //localStorage.setItem('token', response.token); --> esto lo hace el authService.setUser
-        this.authService.setUser(formData.nombreUsuario, response.token);
+        
+        this.authService.setUser(response.usuario.nombre_usuario, response.token);
+        
         this.router.navigate(['/']);
         this.reloadPage();
       },
       error: (error) => {
+        console.error('Error en login', error);
         this.ngxService.stop();
         this.responseMessage =
           error.error?.message || GlobalConstants.genericError;

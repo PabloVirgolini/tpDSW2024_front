@@ -20,7 +20,7 @@ export class SecondHeaderComponent implements OnInit, OnDestroy{
 
   ngOnInit(): void {
     //Me suscribo a los cambios de Auth
-    this.authSubscription = this.authService.authenticatedUser$.subscribe(
+    this.authSubscription = this.authService.authenticatedUserRole$.subscribe(
       (rol) => {
         this.tipoUsuario = rol;
       }
