@@ -12,5 +12,5 @@ import { AppLayoutComponent } from './app-layout/app-layout.component.js';
 })
 export class AppComponent {
   title = 'VolquetesFront';
-  
+
 }

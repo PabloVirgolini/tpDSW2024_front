@@ -16,6 +16,7 @@ bootstrapApplication(AppComponent,
       provideHttpClient(),
       provideAnimationsAsync(),
       // Other providers here
+      
     ],
   })
   .catch((err) => console.error(err));

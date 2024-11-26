@@ -54,6 +54,8 @@ Falta que el usuario se logee
     a. (RESUELTO)
      En el listado de volquetes no se muestra la Descripcion del Tipo de Volquete sino el nro de descripcion del tipo. Hay que ir a buscar la descripcion y mostrar eso, no el nro.
 
+     a.1.- Al agregar un volquete, ponés la fecha de compra y de fabricación pero guarda cualquier cosa. Debe tener que ver con el formato.
+
     b. Falta ver el estado del volquete. Si está alquilado o disponible
 
     c. Hay que agregar accion de ver el "HISTORIAL DE ALQUILERES"
