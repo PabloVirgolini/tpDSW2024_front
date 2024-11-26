@@ -57,7 +57,7 @@ export class ListaVolquetesComponent {
     marca: 'Marca',
     fecha_fabricacion: 'Fecha de Fabricacion',
     fecha_compra: 'Fecha de Compra',
-    tipoVolquete: 'Tipo Volquete',
+    TipoVolquete: 'Tipo Volquete',
   };
 
   private subscription = new Subscription();
