@@ -19,6 +19,7 @@ import { GlobalConstants } from '../../../../../../shared/global-constants.js';
   styleUrl: './tipo-volquetes-list.component.css',
 })
 export class TipoVolquetesListComponent implements OnInit, OnDestroy {
+  
   tipos: TipoVolqueteModel[] = [];
   errorMessage: string | null = null;
   displayedColumns: string[] = [
@@ -52,6 +53,25 @@ export class TipoVolquetesListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     console.log('ngOnInit called');
     this.loadTiposVolquete();
+    //this.suscribirseATiposVolquete();
+    //this.tiposVolqueteService.loadTiposVolquete();
+  }
+
+  private suscribirseATiposVolquete(): void {
+    this.subscription.add(
+      this.tiposVolqueteService.tiposVolquete$.subscribe({
+        next: (data) => {
+          this.tipos = data;
+          console.log('Tipos de volquete recibidos:', data);
+        },
+        error: (error) => {
+          console.error('Error al obtener los tipos de volquete:', error);
+        },
+        complete: () => {
+          console.log('Suscripción a tipos de volquete completada.');
+        }
+      })
+    );
   }
 
   loadTiposVolquete(): void {
@@ -104,10 +124,6 @@ export class TipoVolquetesListComponent implements OnInit, OnDestroy {
       })
     );
   }
-
-
-
-
 
   startEdit(tipo: TipoVolqueteModel): void {
     console.log('StartEdit called');

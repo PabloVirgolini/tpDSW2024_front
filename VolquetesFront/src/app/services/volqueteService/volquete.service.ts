@@ -33,7 +33,7 @@ export class VolqueteService {
       catchError(this.handleError<Volquete[]>('getAll', []))
     );
   }
-
+  
   getMaxId(): Observable<Volquete>{
     console.log('getMaxId called');
     return this.getAll().pipe(

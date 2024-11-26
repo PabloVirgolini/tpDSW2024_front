@@ -15,17 +15,26 @@ export class TiposVolqueteService {
 
   private apiUrl = 'http://localhost:3000/api/volquetes/tipovolquetes';
 
-  private http = inject(HttpClient); // Use inject() to get HttpClient
-
   // tiposVolquete: TipoVolquete[]=[];
 
-  constructor() {
+  constructor(private http: HttpClient) {
     this.loadInitialData();
   }
 
   private loadInitialData() {
     this.getAll().subscribe(tiposVolquete => this.tiposVolqueteSubject.next(tiposVolquete));
   }
+
+loadTiposVolquete():void{
+  this.http.get<TipoVolquete[]>(this.apiUrl).subscribe({
+    next:(data) => this.tiposVolqueteSubject.next(data), // Notifica a los suscriptores.
+    error:(err)=>{
+      console.error('Error al cargar los tipos de volquete', err);// Envía un array vacío en caso de error.
+      this.tiposVolqueteSubject.next([]);
+    },
+  });
+}
+
 
 getAll(): Observable<TipoVolquete[]> {
   console.log('getAll called')
@@ -40,15 +49,10 @@ getAll(): Observable<TipoVolquete[]> {
 getMaxId(): Observable<TipoVolquete>{
    console.log('getMaxId called');
    return this.getAll().pipe(
-    map((tipos:TipoVolquete[])=>{
-        if (!tipos||tipos.length===0){
-          throw new Error('No hay elementos en la lista');
-        }
-
-        const maxTipoVolquete = tipos.reduce((prev,current)=>
-          prev.id > current.id ? prev:current );
-        return maxTipoVolquete;
-    }),
+    map((tipos: TipoVolquete[]) => tipos.length 
+    ? tipos.reduce((prev, current) => prev.id > current.id ? prev : current) 
+    : { id: 0, descripcion_tipo_volquete: 'N/A' }
+  ),
     catchError(this.handleError<TipoVolquete>('getMaxId'))
   );
 }
@@ -61,7 +65,7 @@ getTipo(id: number): Observable<TipoVolquete> {
 
 add(tipo: TipoVolquete): Observable<TipoVolquete> {
   if (!tipo.descripcion_tipo_volquete) {
-    throw new Error('Falta indicar la descripcion');
+    return throwError(() => new Error('Falta indicar la descripción'))
   }
   return this.http.post<TipoVolquete>(this.apiUrl, tipo).pipe(
     tap(() => this.loadInitialData()), // Refresh list
@@ -72,7 +76,7 @@ add(tipo: TipoVolquete): Observable<TipoVolquete> {
 update(tipoVolquete: TipoVolqueteModel): Observable<TipoVolqueteModel> {
   const id = tipoVolquete.id;
   if (!id || isNaN(id)) {
-    throw new Error("ID inválido para la actualización del tipo de volquete");
+    return throwError(()=> new Error("ID inválido para la actualización del tipo de volquete"));
   }
   return this.http.put<TipoVolqueteModel>(`${this.apiUrl}/${id}`, tipoVolquete).pipe(
     tap(() => this.loadInitialData()), // Refresh list
@@ -118,9 +122,10 @@ private handleError<T>(operation = 'operation', result?: T) {
 
 
 private emitirListadoActualizado() {
-  this.getAll().subscribe(tiposVolquete => {
-    this.tiposVolqueteSubject.next(tiposVolquete);
-  });
+  this.getAll().pipe(
+    tap(tiposVolquete => this.tiposVolqueteSubject.next(tiposVolquete))).subscribe
+    
+    // this.getAll().subscribe(tiposVolquete => {this.tiposVolqueteSubject.next(tiposVolquete);  });
 }
 
 }
