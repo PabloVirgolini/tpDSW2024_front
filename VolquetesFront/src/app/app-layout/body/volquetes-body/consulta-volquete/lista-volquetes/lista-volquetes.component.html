@@ -14,10 +14,10 @@
       <tbody>
         <tr *ngFor="let volquete of volquetes" (click)="onSeleccionarTipo(volquete)">
           <td><span>{{ volquete.id }}</span></td>
-          <td><span>{{ volquete.TipoVolquete.descripcion_tipo_volquete }}</span></td>
           <td><span>{{ volquete.marca }}</span></td>
           <td><span>{{ volquete.fecha_fabricacion | date: 'dd/MM/yyyy' }}</span></td>
           <td><span>{{ volquete.fecha_compra | date: 'dd/MM/yyyy' }}</span></td>
+          <td><span>{{ getTipoVolqueteDesc(volquete.TipoVolquete) }}</span></td>
           <td>
             <button (click)="startEdit(volquete)">Editar</button>
             <button (click)="delete(volquete)">Eliminar</button>
