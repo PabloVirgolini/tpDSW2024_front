@@ -1,7 +1,8 @@
 <div class="sidebar">
   <ul class="sidebar-list">
+
     <li *ngFor="let option of sidebarOptions" class="sidebar-item">
-      <div class="sidebar-option" (click)="option.subOptions ? toggleOptions(option) : null">
+      <div *ngIf="option.user.includes(tipoUsuario??'')" class="sidebar-option" (click)="option.subOptions ? toggleOptions(option) : null">
         <img [src]="option.picture" [alt]="option.name" [matTooltip]="tooltipText(option)" matTooltipPosition="right"
           [routerLink]="option.route" routerLinkActive="active" class="sidebar-image" />
         <button class="sidebar-button" [routerLink]="option.route" routerLinkActive="active" *ngIf="!collapsed">{{
@@ -17,6 +18,7 @@
       </ul>
 
     </li>
+
   </ul>
   <!-- Collapse Button -->
   <button class="collapse-button" [ngClass]="{ 'collapsed-padding': collapsed }" (click)=" toggleCollapse() ">

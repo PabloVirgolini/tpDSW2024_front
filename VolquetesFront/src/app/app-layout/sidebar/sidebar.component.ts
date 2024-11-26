@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   RouterLink,
@@ -8,6 +8,8 @@ import {
 } from '@angular/router';
 import { SideBarOption } from './sidebar.interface.js';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../services/authService/auth.service.js';
 
 @Component({
   selector: 'app-sidebar',
@@ -23,19 +25,28 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit, OnDestroy{
   private fixed = true;
   public collapsed = false;
   public expandedOption: string | null = null;
 
+  private authSubscription: Subscription | null = null;
+  tipoUsuario:string | null = null;
+
+  constructor(
+    private authService: AuthService
+  ){}
+
   public sidebarOptions: SideBarOption[] = [
     {
+      user: ['Admin', 'Usuario'],
       name: 'Volquetes',
       picture: 'assets/sidebar-icons/Alquileres.png',
       route: '/volquetes',
       tooltipText: 'Volquetes',
     },
     {
+      user: ['Admin', 'Usuario'],
       name: 'Gastos',
       picture: 'assets/sidebar-icons/Gastos.png',
       route: '/gastos',
@@ -47,6 +58,7 @@ export class SidebarComponent {
       ],
     },
     {
+      user: ['Admin'],
       name: 'Configuraciones',
       picture: 'assets/sidebar-icons/Configuraciones.png',
       route: '/configuraciones',
@@ -89,5 +101,22 @@ export class SidebarComponent {
 
   tooltipText(option: any): string {
     return this.collapsed ? option.tooltipText : '';
+  }
+
+  ngOnInit(): void {
+    //Me suscribo a los cambios de Auth
+    this.authSubscription = this.authService.authenticatedUserRole$.subscribe(
+      (rol) => {
+        this.tipoUsuario = rol;
+      }
+    );
+    // this.tipoUsuario = localStorage.getItem('rol')
+
+  }
+
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
 }

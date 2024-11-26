@@ -113,7 +113,7 @@ export class AuthService {
   }
 
   public obtenerRolUsuario(nombreUsuario: string): Observable<{ rol: string }> {
-    return this.http.get<{ rol: string }>(`/api/usuarios/rol/${nombreUsuario}`).pipe(
+    return this.http.get<{ rol: string }>(`/api/users/rol/${nombreUsuario}`).pipe(
       tap(response => {
         // Cuando obtenemos el rol, lo guardamos en el servicio y en localStorage
         if (response.rol) {

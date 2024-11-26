@@ -1,4 +1,5 @@
 export interface SideBarOption {
+  user: string[];
   name: string;
   picture: string;
   route: string;

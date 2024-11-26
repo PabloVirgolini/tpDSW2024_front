@@ -25,6 +25,8 @@ export class SecondHeaderComponent implements OnInit, OnDestroy{
         this.tipoUsuario = rol;
       }
     );
+    // this.tipoUsuario = localStorage.getItem('rol')
+
   }
 
   ngOnDestroy(): void {
