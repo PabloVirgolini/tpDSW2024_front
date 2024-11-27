@@ -24,8 +24,9 @@ export class AlquilerComponent {
   clientes: ClienteModel[] = [];
   volquetes: VolqueteModel[] = [];
   alquilerForm: FormGroup;
-  displayedColumns: string[] = ['volquete', 'cliente', 'fechaDesde', 'fechaHasta', 'fechaHrEntrega', 'fechaHrRetiro', 'estadoAlquiler'];
+  displayedColumns: string[] = ['id','volquete', 'cliente', 'fechaDesde', 'fechaHasta', 'fechaHrEntrega', 'fechaHrRetiro', 'estadoAlquiler'];
   columnNames: { [key: string]: string } = {
+    id: 'Nro Alquiler',
     volquete: 'Volquete alquilado',
     cliente: 'Cliente',
     fechaDesde: 'Fecha Desde',
@@ -55,6 +56,7 @@ export class AlquilerComponent {
   ) {
     // Inicializar formulario con validaciones
     this.alquilerForm = this.fb.group({
+      id: [0, Validators.required],
       volquete: [0, Validators.required],
       cliente: [0, Validators.required],
       fechaDesde: ['', Validators.required],
@@ -72,10 +74,14 @@ export class AlquilerComponent {
     this.loadClientes();
     this.loadVolquetes();
     this.alquilerForm = this.fb.group({
-      marca: ['', Validators.required],
-      fecha_fabricacion: ['', Validators.required],
-      fecha_compra: ['', Validators.required],
-      tipoVolquete: [0, Validators.required],
+      id: [0, Validators.required],
+      volquete: [0, Validators.required],
+      cliente: [0, Validators.required],
+      fechaDesde: ['', Validators.required],
+      fechaHasta: ['', Validators.required],
+      fechaHrEntrega: ['', Validators.required],
+      fechaHrRetiro: ['', Validators.required],
+      estadoAlquiler: ['', Validators.required],
     });
 
 
@@ -170,17 +176,15 @@ export class AlquilerComponent {
 
   // Cancelar la edición
   cancelEdit(): void {
-    this.isAddingNew = false;
-    this.isEditing = false;
-    this.editingRow = null;
-    this.alquilerForm.reset();
+    this.alquilerForm.reset(); // Resetear el formulario
+    this.isAddingNew = false;  // Restablecer el estado
+    this.isEditing = false;    // Si corresponde
   }
 
   // Agregar un nuevo alquiler
   add(): void {
        // Abrir el formulario para agregar un nuevo volquete
        this.isAddingNew = true;
-       this.alquilerForm.reset(); // Limpiar el formulario
        this.alquilerForm.patchValue({ volquete: null, cliente: null });
            if (!this.isAddingNew) {
              // Obtener el ID del Cliente seleccionado desde el formulario
@@ -236,10 +240,50 @@ export class AlquilerComponent {
     this.subscription.unsubscribe();
   }
 
-  // Método para mostrar el formulario en la consola (para debugging)
   onSubmit(): void {
-    if (this.alquilerForm.valid) {
-      console.log(this.alquilerForm.value);
+    this.isAddingNew = true;
+    if (this.isAddingNew) {  // Solo procesar si estamos en modo de agregar
+      if (this.alquilerForm.valid) {
+        const clienteIdSeleccionada = Number(this.alquilerForm.get('cliente')?.value);
+        const volqueteIdSeleccionada = Number(this.alquilerForm.get('volquete')?.value);
+
+        if (clienteIdSeleccionada && volqueteIdSeleccionada) {
+          const volqueteSeleccionado = this.volquetes.find(vol => vol.id === volqueteIdSeleccionada);
+          const clienteSeleccionado = this.clientes.find(cli => cli.id === clienteIdSeleccionada);
+
+          if (clienteSeleccionado && volqueteSeleccionado) {
+            const alquilerData: AlquilerModel = {
+              id: this.alquilerForm.get('id')?.value,
+              volquete: volqueteIdSeleccionada,
+              cliente: clienteIdSeleccionada,
+              fechaDesde: this.alquilerForm.get('fechaDesde')?.value,
+              fechaHasta: this.alquilerForm.get('fechaHasta')?.value,
+              fechaHrEntrega: this.alquilerForm.get('fechaHrEntrega')?.value,
+              fechaHrRetiro: this.alquilerForm.get('fechaHrRetiro')?.value,
+              estadoAlquiler: this.alquilerForm.get('estadoAlquiler')?.value,
+            };
+
+            this.alquilerService.add(alquilerData).subscribe({
+              next: (response) => {
+                console.log('Alquiler agregado exitosamente', response);
+                this.isAddingNew = false;
+                this.alquilerForm.reset();
+                this.loadAlquileres();
+              },
+              error: (err) => {
+                console.error('Error al agregar alquiler', err);
+              },
+            });
+          } else {
+            console.error('Volquete o Cliente no encontrado');
+          }
+        } else {
+          console.error('Por favor seleccione un cliente o volquete');
+        }
+      } else {
+        console.error('Formulario no válido');
+      }
     }
   }
+
 }
