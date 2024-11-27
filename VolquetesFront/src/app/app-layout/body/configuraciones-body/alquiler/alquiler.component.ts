@@ -160,17 +160,27 @@ export class AlquilerComponent {
   // Guardar los cambios después de la edición
   saveEdit(): void {
     if (this.alquilerForm.valid && this.editTemp) {
-      const editedAlquiler = { ...this.editTemp, ...this.alquilerForm.value };
+      const editedAlquiler: AlquilerModel = {
+        ...this.editTemp,
+        ...this.alquilerForm.value  // Aquí se sobrescriben los valores del alquiler con los del formulario
+      };
+
+      // Realizar la llamada para actualizar
       this.subscription.add(
         this.alquilerService.update(editedAlquiler).subscribe({
-          next: () => {
-            this.loadAlquileres();
-            this.isEditing = false;
-            this.alquilerForm.reset();
+          next: (response) => {
+            console.log('Alquiler actualizado exitosamente', response);
+            this.loadAlquileres();  // Recargar la lista de alquileres
+            this.isEditing = false;  // Cambiar el estado de edición
+            this.alquilerForm.reset();  // Limpiar el formulario
           },
-          error: (error) => console.error('Error al guardar la edición', error),
+          error: (error) => {
+            console.error('Error al guardar la edición', error);
+          }
         })
       );
+    } else {
+      console.error('Formulario no válido o datos no encontrados');
     }
   }
 
@@ -286,4 +296,19 @@ export class AlquilerComponent {
     }
   }
 
+
+
+  getNombreCliente(cli: any): string {
+    // Verifica si tipoVolquete es un objeto y tiene la propiedad 'descripcion_tipo_volquete'
+    return cli && cli.nombre
+      ? cli.nombre
+      : 'Desconocido';
+  }
+
+  getMarcaVolquete(vol: any): string {
+    // Verifica si tipoVolquete es un objeto y tiene la propiedad 'descripcion_tipo_volquete'
+    return vol && vol.marca
+      ? vol.marca
+      : 'Desconocido';
+  }
 }

@@ -15,8 +15,8 @@
       <tbody>
         <tr *ngFor="let alquiler of alquileres">
           <td><span>{{ alquiler.id }}</span></td>
-          <td><span>{{ alquiler.volquete }}</span></td>
-          <td><span>{{ alquiler.cliente }}</span></td>
+          <td><span>{{ getMarcaVolquete(alquiler.volquete) }}</span></td>
+          <td><span>{{ getNombreCliente(alquiler.cliente) }}</span></td>
           <td><span>{{ alquiler.fechaDesde | date }}</span></td>
           <td><span>{{ alquiler.fechaHasta | date }}</span></td>
           <td><span>{{ alquiler.fechaHrEntrega | date:'shortTime' }}</span></td>
