@@ -4,7 +4,7 @@ export interface Volquete {
   marca: string;
   fecha_compra: Date;
   fecha_fabricacion: Date;
-  TipoVolquete: number;
+  TipoVolquete: number | { id: number; descripcion_tipo_volquete: string };
   }
 
 export class VolqueteModel implements Volquete {
@@ -12,7 +12,7 @@ export class VolqueteModel implements Volquete {
   marca: string;
   fecha_compra: Date;
   fecha_fabricacion: Date;
-  TipoVolquete: number;
+  TipoVolquete: number | { id: number; descripcion_tipo_volquete: string };
 
 
   constructor(

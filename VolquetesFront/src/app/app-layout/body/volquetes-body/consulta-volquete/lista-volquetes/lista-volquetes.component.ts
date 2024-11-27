@@ -20,7 +20,7 @@ import { VolqueteBodyService } from '../../volquete-body.service.js';
 
 
 
-export class TuModulo { }
+export class Modulo { }
 @Component({
   selector: 'app-lista-volquetes',
   standalone: true,
@@ -47,6 +47,9 @@ export class ListaVolquetesComponent {
   volqueteSeleccionado: VolqueteModel | null = null;
   deletingRow: VolqueteModel | null = null;
   editingRow: VolqueteModel | null = null;
+
+  filtroTipoVolquete: string = ''; // Filtro por tipo de volquete
+  volquetesFiltrados: VolqueteModel[] = []; // Lista de volquetes filtrados
 
   getColspan(): number {
     return this.displayedColumns.reduce((acc) => acc + 1, 0) + 1;
@@ -87,6 +90,8 @@ export class ListaVolquetesComponent {
       fecha_compra: ['', Validators.required],
       tipoVolquete: [0, Validators.required],
     });
+    this.volquetesFiltrados = [...this.volquetes];
+
   }
 
   loadTipoVolquetes(): void {
@@ -113,6 +118,7 @@ export class ListaVolquetesComponent {
         }
       )
     );
+
   }
 
   delete(volquete: VolqueteModel): void {
@@ -291,9 +297,41 @@ export class ListaVolquetesComponent {
     this.volqueteForm.reset();
   }
 
-  getTipo(id: number): Observable<TipoVolqueteModel> {
-    return this.tipoVolqueteService.getTipo(id);
+
+  filtrarPorTipo(): void {
+    if (this.filtroTipoVolquete === '') {
+      // Si el filtro está vacío, restauramos todos los volquetes
+      this.volquetesFiltrados = [...this.volquetes];
+      console.log("Volquetes filtrados (todos):", this.volquetesFiltrados);
+    } else {
+      // Aseguramos que el filtro sea un número
+      const filtroId = +this.filtroTipoVolquete;  // Convertimos el filtro a número
+      console.log("Filtro de tipo (como número):", filtroId);
+
+      // Filtramos los volquetes por el tipo (número o id de objeto)
+      this.volquetesFiltrados = this.volquetes.filter(volquete => {
+        console.log("Volquete actual:", volquete);
+        console.log("TipoVolquete valor directo:", volquete.TipoVolquete);
+
+        // Verificamos si TipoVolquete es un objeto (con 'id') o un número
+        if (typeof volquete.TipoVolquete === 'object') {
+          // Si es un objeto, comparamos con el id del objeto
+          return volquete.TipoVolquete.id === filtroId;
+        }
+
+        // Si TipoVolquete es un número, lo comparamos directamente
+        return volquete.TipoVolquete === filtroId;
+      });
+
+      console.log("Volquetes filtrados por tipo:", this.volquetesFiltrados);
+    }
   }
+
+
+
+
+
+
 
 
 

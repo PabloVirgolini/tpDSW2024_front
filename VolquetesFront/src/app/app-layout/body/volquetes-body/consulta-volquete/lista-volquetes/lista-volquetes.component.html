@@ -1,6 +1,17 @@
 <div class="tipos-volquete-list-container">
   <h1 class="tipos-volquete-title">Volquetes</h1>
 
+  <!-- Filtro por Tipo de Volquete -->
+  <div class="filtro-container">
+    <label for="filtroTipoVolquete">Filtrar por Tipo:</label>
+    <select id="filtroTipoVolquete" [(ngModel)]="filtroTipoVolquete" (change)="filtrarPorTipo()">
+      <option value="">Todos</option>
+      <option *ngFor="let tipo of tipoVolquetes" [value]="tipo.id">
+        {{ tipo.descripcion_tipo_volquete  }}
+      </option>
+    </select>
+  </div>
+    <!-- Lista de Volquetes -->
   <div class="tipos-volquete-table-container">
     <table class="tipos-volquete-table">
       <thead>
@@ -12,7 +23,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let volquete of volquetes" (click)="onSeleccionarTipo(volquete)">
+        <tr *ngFor="let volquete of volquetesFiltrados"(click)="onSeleccionarTipo(volquete)">
           <td><span>{{ volquete.id }}</span></td>
           <td><span>{{ volquete.marca }}</span></td>
           <td><span>{{ volquete.fecha_fabricacion | date: 'dd/MM/yyyy' }}</span></td>
