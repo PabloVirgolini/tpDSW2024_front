@@ -68,8 +68,22 @@ Según el rol del usuario se debería poder ver "Configuraciones" o no.
     f. Ahora que el listado de volquetes muestra la DESCRIPCION DEL TIPO, a la hora de EDITAR el volquete tenemos que tener una lista desplegable del TIPO para editarlo, y vamos a tener que modificar el Update del servicio de VolqueteService para actualizar el id_tipo_volquete que tenemos guardado en la tabla de Volquetes si se cambia.
 
     g. Quiero filtrar por tipo y por estado
+    Hay un filtro por TipoVolquete que no está andando bien. Apenas entrás te debería mostrar "TODO" y no te muestra nada.
 
     h. (RESUELTO) 
         Al AGREGAR o EDITAR un volquete se pide la ID del tipoVolquete. Hay que hacer como en USUARIOS cuando piden el ROL: Pedir la DESCRIPCION y de ahí obtener la ID del tipo.
 
-    
+6. BACKEND.-
+    6.1.- Authenticate Token y CheckRole Token. Esto tiene que estar en las rutas de las API para hacer un control a nivel BackEnd.
+
+    6.2.- ALQUILER
+    El CU principal es el alquilar un volquete. Debe haber validaciones antes de ejecutar el ADD. Por ejemplo:
+    - Que el volquete está libre
+    - Que las fechas tengan sentido
+    - Que exista el cliente y todos los demás datos
+
+    6.3.- DEFINIR UN 2DO CUU relacionado al anterior
+    Puede ser registrar el pago o el retiro del volquete.
+
+
+
