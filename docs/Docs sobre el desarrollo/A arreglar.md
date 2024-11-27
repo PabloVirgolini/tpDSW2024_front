@@ -47,7 +47,8 @@
 3.- (RESUELTO)
 Falta que el usuario se logee
 
-4.- Según el rol del usuario se debería poder ver "Configuraciones" o no.
+4.- (RESUELTO)
+Según el rol del usuario se debería poder ver "Configuraciones" o no.
 
 
 5.- Volquetes
