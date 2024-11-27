@@ -3,6 +3,7 @@ import {ConsultaVolqueteComponent} from './app-layout/body/volquetes-body/consul
 import { VolquetesBodyComponent } from './app-layout/body/volquetes-body/volquetes-body.component.js';
 import { TipoVolqueteComponent } from './app-layout/body/configuraciones-body/tipo-volquete/tipo-volquete.component.js';
 import { UsuariosComponent } from './app-layout/body/configuraciones-body/usuarios/usuarios.component.js';
+import { AlquilerComponent } from './app-layout/body/configuraciones-body/alquiler/alquiler.component.js';
 
 
 export const routes: Routes = [
@@ -10,6 +11,7 @@ export const routes: Routes = [
   //{ path: 'app-consulta-volquete', component: VolquetesBodyComponent },
   { path: 'config/tiposVolquetes', component: TipoVolqueteComponent },
   { path: 'config/usuarios', component: UsuariosComponent },
+  { path: 'config/alquileres', component: AlquilerComponent },
 
   { path: '**', redirectTo: '', pathMatch: 'full' }, // Ruta por defecto
 ];

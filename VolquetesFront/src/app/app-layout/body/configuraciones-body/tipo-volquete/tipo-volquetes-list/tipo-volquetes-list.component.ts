@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms'
 
 import { TipoVolqueteModel } from '../../../../../model/interfaces/tipo_volquete.interface.js';
@@ -19,7 +19,7 @@ import { GlobalConstants } from '../../../../../../shared/global-constants.js';
   styleUrl: './tipo-volquetes-list.component.css',
 })
 export class TipoVolquetesListComponent implements OnInit, OnDestroy {
-  
+
   tipos: TipoVolqueteModel[] = [];
   errorMessage: string | null = null;
   displayedColumns: string[] = [
@@ -46,9 +46,14 @@ export class TipoVolquetesListComponent implements OnInit, OnDestroy {
 
   constructor(
     private tiposVolqueteService: TiposVolqueteService,
+    private router: Router,
     private tiposVolqueteFormListService: TiposVolqueteBodyService,
     private snackbarService:SnackbarService
   ) {}
+
+  alquilarVolquete(volquete: any): void {
+    this.router.navigate(['/alquiler'], { queryParams: { id: volquete.id } });
+  }
 
   ngOnInit(): void {
     console.log('ngOnInit called');

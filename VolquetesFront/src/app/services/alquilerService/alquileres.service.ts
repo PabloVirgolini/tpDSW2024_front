@@ -15,7 +15,7 @@ export class AlquilerService {
   private alquilerSubject = new BehaviorSubject<Alquiler[]>([]);
   public alquileres$: Observable<Alquiler[]> = this.alquilerSubject.asObservable();
 
-  private apiUrl = 'http://localhost:3000/api/users';
+  private apiUrl = 'http://localhost:3000/api/alquileres';
 
   private http = inject(HttpClient); // Use inject() to get HttpClient
 

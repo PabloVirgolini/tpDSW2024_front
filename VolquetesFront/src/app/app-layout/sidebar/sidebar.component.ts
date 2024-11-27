@@ -45,6 +45,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
       route: '/volquetes',
       tooltipText: 'Volquetes',
     },
+
     {
       user: ['Admin', 'Usuario'],
       name: 'Gastos',
@@ -66,9 +67,11 @@ export class SidebarComponent implements OnInit, OnDestroy{
       subOptions: [
         { name: 'Usuarios', route: 'config/usuarios' },
         { name: 'Tipos de Volquetes', route: 'config/tiposVolquetes' },
+        { name: 'Alquilar Volquete', route: 'config/alquileres' },
       ],
     },
   ];
+
 
   @Output() opened = new EventEmitter<any>();
 

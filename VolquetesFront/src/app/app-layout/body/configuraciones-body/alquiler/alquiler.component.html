@@ -1,0 +1,122 @@
+<div class="alquiler-list-container">
+  <h1 class="alquiler-title">Alquilares</h1>
+
+  <!-- Lista de Alquileres -->
+  <div class="alquiler-table-container">
+    <table class="alquiler-table">
+      <thead>
+        <tr>
+          <th *ngFor="let column of displayedColumns">
+            {{ columnNames[column] }}
+          </th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let alquiler of alquileres">
+          <td><span>{{ alquiler.id }}</span></td>
+          <td><span>{{ alquiler.volquete }}</span></td>
+          <td><span>{{ alquiler.cliente }}</span></td>
+          <td><span>{{ alquiler.fechaDesde | date }}</span></td>
+          <td><span>{{ alquiler.fechaHasta | date }}</span></td>
+          <td><span>{{ alquiler.fechaHrEntrega | date:'shortTime' }}</span></td>
+          <td><span>{{ alquiler.fechaHrRetiro | date:'shortTime' }}</span></td>
+          <td><span>{{ alquiler.estadoAlquiler }}</span></td>
+          <td>
+            <button (click)="startEdit(alquiler)">Editar</button>
+            <button (click)="delete(alquiler)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Botón de "Agregar" fuera de la tabla, solo una vez -->
+  <div class="add-button-container">
+    <button (click)="add()" class="add-button">
+      <span class="add-icon">+</span>
+      <span>Agregar Nuevo Alquiler</span>
+    </button>
+  </div>
+
+<!-- Modal para agregar o editar volquete -->
+<div *ngIf="isAddingNew || isEditing" class="modal">
+  <div class="modal-content">
+    <h2>{{ isAddingNew ? 'Alquilar un volquete' : 'Editar Alquiler' }}</h2>
+    <form [formGroup]="alquilerForm" (ngSubmit)="onSubmit()">
+
+      <!--  Volquete -->
+      <label for="volquete">Volquete:</label>
+      <select id="volquete" formControlName="volquete" required>
+        <option value="" disabled selected>Seleccione un Volquete</option>
+        <option *ngFor="let vol of volquetes" [value]="vol.id">
+          {{ vol.marca }}
+        </option>
+      </select>
+
+      <!--  Cliente -->
+      <label for="cliente">Cliente:</label>
+      <select id="cliente" formControlName="cliente" required>
+        <option value="" disabled selected>Seleccione un cliente</option>
+        <option *ngFor="let cli of clientes" [value]="cli.id">
+          {{ cli.nombre }}
+        </option>
+      </select>
+
+
+      <!-- Fecha Desde -->
+      <label for="fechaDesde">Fecha Desde:</label>
+      <input
+        id="fechaDesde"
+        formControlName="fechaDesde"
+        required
+        type="date"
+      />
+
+      <!-- Fecha Hasta -->
+      <label for="fechaHasta">Fecha Hasta:</label>
+      <input
+        id="fechaHasta"
+        formControlName="fechaHasta"
+        required
+        type="date"
+      />
+
+
+      <!-- Fecha Entrega -->
+      <label for="fechaHrEntrega">Fecha Entrega:</label>
+      <input
+        id="fechaHrEntrega"
+        formControlName="fechaHrEntrega"
+        required
+        type="date"
+      />
+
+         <!-- Fecha Retiro -->
+         <label for="fechaHrRetiro">Fecha Retiro:</label>
+         <input
+           id="fechaHrRetiro"
+           formControlName="fechaHrRetiro"
+           required
+           type="date"
+         />
+
+        <!-- Estado Alquiler -->
+        <label for="estadoAlquiler">Estado Alquiler:</label>
+        <input
+          id="estadoAlquiler"
+          formControlName="estadoAlquiler"
+          required
+          placeholder="Ej: ALQUILADO, PENDIENTE"
+        />
+
+
+      <!-- Botones -->
+      <button type="submit">{{ isAddingNew ? 'Agregar' : 'Guardar' }}</button>
+      <button type="button" (click)="cancelEdit()">Cancelar</button>
+    </form>
+  </div>
+</div>
+
+
+
