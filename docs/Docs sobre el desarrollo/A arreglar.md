@@ -73,17 +73,35 @@ Según el rol del usuario se debería poder ver "Configuraciones" o no.
     h. (RESUELTO) 
         Al AGREGAR o EDITAR un volquete se pide la ID del tipoVolquete. Hay que hacer como en USUARIOS cuando piden el ROL: Pedir la DESCRIPCION y de ahí obtener la ID del tipo.
 
-6. BACKEND.-
-    6.1.- Authenticate Token y CheckRole Token. Esto tiene que estar en las rutas de las API para hacer un control a nivel BackEnd.
+    i. El profe comenta que sería bueno que un usuario "Comun" no pueda eliminar un volquete. Hoy puede hacerlo.
 
-    6.2.- ALQUILER
+6.-  BackENd Authenticate Token y CheckRole Token. Esto tiene que estar en las rutas de las API para hacer un control a nivel BackEnd.
+
+7.- ALQUILER
     El CU principal es el alquilar un volquete. Debe haber validaciones antes de ejecutar el ADD. Por ejemplo:
     - Que el volquete está libre
-    - Que las fechas tengan sentido
+    - Que las fechas tengan sentido - Validar
     - Que exista el cliente y todos los demás datos
 
-    6.3.- DEFINIR UN 2DO CUU relacionado al anterior
+8.- MOBILE FIRST.- Las tablas se muestran incompletas.
+El profesor dio la idea de ocultar columnas y achicar botones.
+Los botones deberían estar siempre visibles pero podrían ser imagenes en lugar de palabras así achicamos.
+La posición de la sidebar también podría ser distinta.
+
+
+9.- DEFINIR UN 2DO CUU relacionado al anterior
     Puede ser registrar el pago o el retiro del volquete.
 
+    10.- Todas las ELIMINACIONES deberian tener un pedido de confirmaciòn y un aviso (POPUP) para que el usuario se notifique de la accion
 
+    11.- Usar guards para acceso a las rutas. Persistir el JWT en user env.
 
+    12.- Usuario: Guardar un hash y no la clave
+
+    13.- Al final del trabajo borrar todos los console.log
+
+    14.- Deben haber filtros por backend que contemplen la paginacion
+
+    15.- Deployar el dominio en Fl0, Versel, Railway, Scale, Render.com
+
+    16.- Hacer testing para un par de controladores del backend y un par de componentes del frontend.
