@@ -96,7 +96,8 @@ La posición de la sidebar también podría ser distinta.
 
     11.- Usar guards para acceso a las rutas. Persistir el JWT en user env.
 
-    12.- Usuario: Guardar un hash y no la clave
+    12.- (RESUELTO)
+    Usuario: Guardar un hash y no la clave
 
     13.- Al final del trabajo borrar todos los console.log
 

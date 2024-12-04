@@ -7,11 +7,11 @@ import { AlquilerComponent } from './app-layout/body/configuraciones-body/alquil
 
 
 export const routes: Routes = [
-  { path: 'volquetes', component: ConsultaVolqueteComponent },
+  { path: 'config/volquetes', component: ConsultaVolqueteComponent },
   //{ path: 'app-consulta-volquete', component: VolquetesBodyComponent },
   { path: 'config/tiposVolquetes', component: TipoVolqueteComponent },
   { path: 'config/usuarios', component: UsuariosComponent },
-  { path: 'config/alquileres', component: AlquilerComponent },
+  { path: 'volquetes/alquileres', component: AlquilerComponent },
 
   { path: '**', redirectTo: '', pathMatch: 'full' }, // Ruta por defecto
 ];

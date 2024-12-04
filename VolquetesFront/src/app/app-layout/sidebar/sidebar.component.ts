@@ -39,15 +39,18 @@ export class SidebarComponent implements OnInit, OnDestroy{
 
   public sidebarOptions: SideBarOption[] = [
     {
-      user: ['admin', 'Usuario'],
+      user: ['admin', 'user'],
       name: 'Volquetes',
       picture: 'assets/sidebar-icons/Alquileres.png',
-      route: '/volquetes',
+      route: '/',
       tooltipText: 'Volquetes',
+      subOptions: [
+        { name: 'Alquilar Volquete', route: 'volquetes/alquileres' },
+      ],
     },
 
     {
-      user: ['admin', 'Usuario'],
+      user: ['admin', 'user'],
       name: 'Gastos',
       picture: 'assets/sidebar-icons/Gastos.png',
       route: '/gastos',
@@ -67,7 +70,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
       subOptions: [
         { name: 'Usuarios', route: 'config/usuarios' },
         { name: 'Tipos de Volquetes', route: 'config/tiposVolquetes' },
-        { name: 'Alquilar Volquete', route: 'config/alquileres' },
+        { name: 'Volquetes', route: 'config/volquetes' },
       ],
     },
   ];
