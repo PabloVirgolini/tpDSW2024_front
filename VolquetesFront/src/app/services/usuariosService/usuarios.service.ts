@@ -39,6 +39,16 @@ export class UsuariosService {
     );
   }
 
+  getAllPossibleRoles (): Observable<string[]> {
+    //console.log('getRolesList called');
+    const url = `${this.apiUrl}/getAllPossibleRoles`; //Endpoint del backend
+    return this.http.get<{ roles: string[] }>(url).pipe(
+      // tap((response) => console.log('Response from backend:', response)), // Log completo
+      map((response) => response.roles),
+      catchError(this.handleError<string[]>('getAllPossibleRoles', []))
+    );
+  }
+
   getTipo(id: number): Observable<Usuario> {
     return this.http
       .get<Usuario>(`${this.apiUrl}/${id}`)

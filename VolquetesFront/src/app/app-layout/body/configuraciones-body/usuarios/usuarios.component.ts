@@ -39,8 +39,6 @@ export class UsuariosComponent {
     rol: '',
   };
 
-  listadoRoles = ['Admin','Usuario'];
-
   isAddingNew: boolean = false;
   isEditing: boolean = false;
 
@@ -51,9 +49,15 @@ export class UsuariosComponent {
     private usuariosService: UsuariosService
   ) {}
 
+  listadoRoles: string[] = [];
+
   ngOnInit(): void {
     console.log('ngOnInit called');
     this.loadUsuarios();
+    this.usuariosService.getAllPossibleRoles().subscribe((roles)=>{
+      console.log('Roles recibidos:', roles);
+      this.listadoRoles = roles;
+    });
   }
 
   loadUsuarios(): void {
