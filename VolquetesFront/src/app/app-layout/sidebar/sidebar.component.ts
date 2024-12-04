@@ -39,7 +39,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
 
   public sidebarOptions: SideBarOption[] = [
     {
-      user: ['Admin', 'Usuario'],
+      user: ['admin', 'Usuario'],
       name: 'Volquetes',
       picture: 'assets/sidebar-icons/Alquileres.png',
       route: '/volquetes',
@@ -47,7 +47,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
     },
 
     {
-      user: ['Admin', 'Usuario'],
+      user: ['admin', 'Usuario'],
       name: 'Gastos',
       picture: 'assets/sidebar-icons/Gastos.png',
       route: '/gastos',
@@ -59,7 +59,7 @@ export class SidebarComponent implements OnInit, OnDestroy{
       ],
     },
     {
-      user: ['Admin'],
+      user: ['admin'],
       name: 'Configuraciones',
       picture: 'assets/sidebar-icons/Configuraciones.png',
       route: '/configuraciones',
