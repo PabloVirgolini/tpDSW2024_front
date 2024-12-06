@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { VolqueteModel } from '../../../model/interfaces/volquete.interface.js';
+import { VolqueteModel } from '../../../../model/interfaces/volquete.interface.js';
 
 @Injectable({
   providedIn: 'root'

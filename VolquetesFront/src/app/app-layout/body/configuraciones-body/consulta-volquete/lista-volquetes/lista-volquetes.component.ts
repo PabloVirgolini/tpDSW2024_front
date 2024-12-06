@@ -16,7 +16,7 @@ import { VolqueteService } from     '../../../../../services/volqueteService/vol
 import { TiposVolqueteService } from '../../../../../services/tiposVolqueteService/tipos-volquete.service.js';
 import { Observable } from 'rxjs';
 import { TipoVolqueteModel } from '../../../../../model/interfaces/tipo_volquete.interface.js';
-import { VolqueteBodyService } from '../../volquete-body.service.js';
+import { VolqueteBodyService } from '../volquete-body.service.js';
 
 
 

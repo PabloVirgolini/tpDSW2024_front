@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ListaVolquetesComponent } from './lista-volquetes/lista-volquetes.component.js';
-import { Volquete } from '../../../../../../../VolquetesFront/src/app/model/interfaces/volquete.interface.js';
+import { Volquete } from '../../../../model/interfaces/volquete.interface.js';
 
 
 @Component({

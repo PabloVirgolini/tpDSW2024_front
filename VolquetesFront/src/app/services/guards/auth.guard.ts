@@ -1,0 +1,18 @@
+import { CanActivateFn } from '@angular/router';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+
+export const authGuard: CanActivateFn = (route, state) => {
+  const router = inject(Router);
+  /*
+  Se utiliza inject() para acceder a servicios como el Router, 
+  evitando tener que inyectarlos en un constructor (para guards funcionales).
+  */
+  const isAuthenticated = true; // acá iría la lógica de autenticación.
+
+  if (!isAuthenticated) {
+    router.navigate(['/login']);
+    return false;
+  }
+  return true;
+};
