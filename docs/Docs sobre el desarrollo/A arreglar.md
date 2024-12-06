@@ -73,7 +73,9 @@ Según el rol del usuario se debería poder ver "Configuraciones" o no.
     h. (RESUELTO) 
         Al AGREGAR o EDITAR un volquete se pide la ID del tipoVolquete. Hay que hacer como en USUARIOS cuando piden el ROL: Pedir la DESCRIPCION y de ahí obtener la ID del tipo.
 
-    i. El profe comenta que sería bueno que un usuario "Comun" no pueda eliminar un volquete. Hoy puede hacerlo.
+    i. (RESUELTO PARCIALIMENTE)
+    El profe comenta que sería bueno que un usuario "Comun" no pueda eliminar un volquete. Hoy puede hacerlo.
+            --> Si bien no lo ve, no es algo que esté limitado por rutas y permisos. Hay que trabajar en eso.
 
 6.-  BackENd Authenticate Token y CheckRole Token. Esto tiene que estar en las rutas de las API para hacer un control a nivel BackEnd.
 
