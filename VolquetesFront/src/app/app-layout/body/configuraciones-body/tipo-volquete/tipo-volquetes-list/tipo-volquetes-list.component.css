@@ -1,70 +1,167 @@
+/* Fondo de la página */
+body {
+  background-color: #f4f7fc; /* Fondo gris claro, moderno */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente más moderna */
+  margin: 0;
+  padding: 0;
+  color: #4a4a4a; /* Gris oscuro para un contraste suave */
+}
+
+/* Contenedor principal */
 .tipos-volquete-list-container {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-  }
-  
-  .tipos-volquete-title {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  .tipos-volquete-table-container {
-    overflow-x: auto; /* Permite el desplazamiento horizontal si es necesario */
-  }
-  
-  .tipos-volquete-table {
-    width: auto;
-    border-collapse: collapse;
-    border: 1px solid #ddd;
-  }
-  
-  .tipos-volquete-table th,
-  .tipos-volquete-table td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: left;
-  }
-  
-  .tipos-volquete-table th {
-    background-color: #f4f4f4;
-    color: #333;
-  }
-  
-  .tipos-volquete-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
-  .tipos-volquete-table tbody tr:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .tipos-volquete-table .selected {
-    background-color: #e0e0e0;
-  }
-  
-  .add-row {
-    cursor: pointer;
-  }
-  
-  .add-row-cell {
-    text-align: center;
-  }
-  
-  .add-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .add-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .add-icon {
-    font-size: 20px;
-    margin-right: 8px;
-  }
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* Título */
+.tipos-volquete-title {
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+  text-align: left;
+  font-weight: bold;
+  color: #2c3e50; /* Azul oscuro */
+  letter-spacing: 1px;
+}
+
+/* Filtro por tipo de volquete */
+.filtro-container {
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+}
+
+.filtro-container select {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  background-color: #f0f8ff;
+  transition: border-color 0.3s ease;
+}
+
+.filtro-container select:focus {
+  border-color: #006a8e;
+  outline: none;
+}
+
+/* Tabla de volquetes */
+.tipos-volquete-table th {
+  background: linear-gradient(45deg, #0077b6, #00b4d8);
+  color: #fff;
+  padding: 16px;
+  text-align: center;
+  font-size: 1.1rem;
+  border-radius: 8px 8px 0 0;
+}
+
+.tipos-volquete-table th,
+.tipos-volquete-table td {
+  padding: 12px;
+  text-align: left;
+}
+
+.tipos-volquete-table tbody tr:nth-child(even) {
+  background-color: #f8f9fb; /* Gris muy claro */
+}
+
+.tipos-volquete-table tbody tr:hover {
+  background-color: #e1f5fe; /* Azul pálido */
+}
+
+/* Botones de acción */
+.editar-btn, .eliminar-btn, .add-button {
+  background: #006a8e; /* Azul moderno */
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+
+/* Modal */
+.modal {
+  background-color: rgba(0, 0, 0, 0.5); /* Opacidad más suave */
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  width: 480px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+  font-size: 2rem;
+  text-align: center;
+  color: #006a8e;
+  margin-bottom: 20px;
+}
+
+/* Botones de modal */
+.modal-content button[type="submit"] {
+  background: linear-gradient(45deg, #00b4d8, #0077b6);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content button[type="submit"]:hover {
+  background: linear-gradient(45deg, #0077b6, #00b4d8);
+}
+
+.modal-content button[type="button"] {
+  background-color: #f44336;
+  color: #fff;
+}
+
+
+
+/* Encabezados de la tabla */
+.tipos-volquete-table th {
+  background: linear-gradient(45deg, #2c3e50, #34495e); /* Azul oscuro y gris oscuro */
+  color: #fff;
+  padding: 16px;
+  text-align: center;
+  font-size: 1.1rem;
+  border-radius: 8px 8px 0 0;
+  font-weight: normal;
+  letter-spacing: 0.5px;
+}
+
+/* Estilos de la tabla */
+.tipos-volquete-table th,
+.tipos-volquete-table td {
+  padding: 12px;
+  text-align: left;
+}
+/* Aseguramos que la celda "Acciones" también esté centrada */
+.tipos-volquete-table th:last-child {
+  text-align: center;
+}
+
+/* Aseguramos que todas las celdas de encabezado estén centradas */
+.tipos-volquete-table th {
+  text-align: center;
+}
+
+/* Centramos el contenido de la columna de acciones */
+.tipos-volquete-table td:last-child {
+  text-align: center; /* Alineamos los botones al centro */
+}
+
+/* Estilos de las filas */
+.tipos-volquete-table tbody tr:nth-child(even) {
+  background-color: #f5f8fc; /* Gris muy claro */
+}
+
+.tipos-volquete-table tbody tr:hover {
+  background-color: #e3f2fd; /* Azul pálido */
+}

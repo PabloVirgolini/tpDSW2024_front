@@ -1,68 +1,116 @@
+/* Fondo de la página */
+body {
+  background-color: #f4f7fc;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #4a4a4a;
+}
+
+/* Contenedor principal */
 .alquiler-list-container {
-  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
   margin: 20px;
 }
 
+/* Título */
 .alquiler-title {
-  font-size: 24px;
+  font-size: 2.2rem;
   margin-bottom: 20px;
+  text-align: left;
+  font-weight: bold;
+  color: #2c3e50;
+  letter-spacing: 1px;
 }
 
+/* Contenedor de la tabla */
 .alquiler-table-container {
   overflow-x: auto;
-  /* Permite el desplazamiento horizontal si es necesario */
 }
 
+/* Tabla */
 .alquiler-table {
   width: 100%;
   border-collapse: collapse;
   border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
-.alquiler-table th,
-.alquiler-table td {
+.alquiler-table th {
+  background: linear-gradient(45deg, #2c3e50, #34495e);
+  color: #fff;
+  padding: 16px;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: normal;
+  letter-spacing: 0.5px;
+}
+
+.alquiler-table th, .alquiler-table td {
   border: 1px solid #ddd;
   padding: 12px;
   text-align: left;
 }
 
-.alquiler-table th {
-  background-color: #f4f4f4;
-  color: #333;
-}
-
 .alquiler-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: #f5f8fc;
 }
 
 .alquiler-table tbody tr:hover {
-  background-color: #f1f1f1;
+  background-color: #e3f2fd;
 }
 
 .alquiler-table .selected {
   background-color: #e0e0e0;
 }
 
-.add-row {
+/* Botones */
+.editar-btn, .eliminar-btn, .add-button {
+  background: #006a8e;
+  color: #fff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.3s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
-.add-row-cell {
-  text-align: center;
+.editar-btn:hover {
+  background-color: #004b63;
+  transform: scale(1.05);
+}
+
+.eliminar-btn {
+  background-color: #f0675d;
+}
+
+.eliminar-btn:hover {
+  background-color: #e44848;
+  transform: scale(1.05);
 }
 
 .add-button {
-  background-color: #007bff;
+  background: linear-gradient(45deg, #00b4d8, #0077b6);
   color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: 12px 20px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background 0.3s ease;
+  font-size: 1.1rem;
+  border: none;
 }
 
 .add-button:hover {
-  background-color: #0056b3;
+  background: linear-gradient(45deg, #0077b6, #00b4d8);
 }
 
 .add-icon {
@@ -70,9 +118,7 @@
   margin-right: 8px;
 }
 
-
-
-/*AGREGO MODAL PARA EL FORMULARIO*/
+/* Modal */
 .modal {
   position: fixed;
   top: 0;
@@ -118,9 +164,7 @@
   color: #555;
 }
 
-.modal-content input[type="text"],
-.modal-content input[type="password"],
-.modal-content input[type="email"] {
+.modal-content input, .modal-content select {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -164,28 +208,11 @@
 
 .modal-content input:valid {
   border-color: #4CAF50;
+  background-color: #e6f7e1;
 }
 
 .modal-content input:focus {
   outline: none;
   border-color: #1e90ff;
   box-shadow: 0 0 5px rgba(30, 144, 255, 0.5);
-}
-
-/* Para campos con datos inválidos */
-.modal-content input:invalid {
-  border-color: #e74c3c;  /* Rojo */
-  background-color: #fceae9;  /* Fondo rosado claro */
-}
-
-/* Para campos con datos válidos */
-.modal-content input:valid {
-  border-color: #4CAF50;  /* Verde */
-  background-color: #e6f7e1;  /* Fondo verde claro */
-}
-
-.modal-content input:focus {
-  outline: none;  /* Eliminar el borde de enfoque por defecto */
-  border-color: #1e90ff;  /* Azul claro */
-  box-shadow: 0 0 5px rgba(30, 144, 255, 0.5);  /* Efecto de resplandor */
 }

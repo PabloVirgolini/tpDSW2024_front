@@ -1,17 +1,18 @@
 <div class="tipos-volquete-list-container">
-  <h1 class="tipos-volquete-title">Volquetes</h1>
+  <h1 class="tipos-volquete-title">Gestión de Volquetes</h1>
 
   <!-- Filtro por Tipo de Volquete -->
   <div class="filtro-container">
-    <label for="filtroTipoVolquete">Filtrar por Tipo:</label>
-    <select id="filtroTipoVolquete" [(ngModel)]="filtroTipoVolquete" (change)="filtrarPorTipo()">
+    <label for="filtroTipoVolquete" class="filtro-label">Filtrar por Tipo:</label>
+    <select id="filtroTipoVolquete" [(ngModel)]="filtroTipoVolquete" (change)="filtrarPorTipo()" class="filtro-select">
       <option value="">Todos</option>
       <option *ngFor="let tipo of tipoVolquetes" [value]="tipo.id">
-        {{ tipo.descripcion_tipo_volquete  }}
+        {{ tipo.descripcion_tipo_volquete }}
       </option>
     </select>
   </div>
-    <!-- Lista de Volquetes -->
+
+  <!-- Lista de Volquetes -->
   <div class="tipos-volquete-table-container">
     <table class="tipos-volquete-table">
       <thead>
@@ -23,23 +24,21 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let volquete of volquetesFiltrados"(click)="onSeleccionarTipo(volquete)">
+        <tr *ngFor="let volquete of volquetesFiltrados" (click)="onSeleccionarTipo(volquete)">
           <td><span>{{ volquete.id }}</span></td>
           <td><span>{{ volquete.marca }}</span></td>
           <td><span>{{ volquete.fecha_fabricacion | date: 'dd/MM/yyyy' }}</span></td>
           <td><span>{{ volquete.fecha_compra | date: 'dd/MM/yyyy' }}</span></td>
           <td><span>{{ getTipoVolqueteDesc(volquete.TipoVolquete) }}</span></td>
           <td>
-            <button (click)="startEdit(volquete)">Editar</button>
-            <button (click)="delete(volquete)">Eliminar</button>
-
+            <button class="editar-btn" (click)="startEdit(volquete)">Editar</button>
+            <button class="eliminar-btn" (click)="delete(volquete)">Eliminar</button>
           </td>
         </tr>
         <tr>
           <td [attr.colspan]="getColspan()" class="add-row-cell">
             <button (click)="onAdd()" class="add-button">
-              <span class="add-icon">+</span>
-              <span>Agregar</span>
+              <span class="add-icon">+</span> Agregar Volquete
             </button>
           </td>
         </tr>
@@ -53,34 +52,15 @@
   <div class="modal-content">
     <h2>{{ isAddingNew ? 'Agregar Volquete' : 'Editar Volquete' }}</h2>
     <form [formGroup]="volqueteForm" (ngSubmit)="onSubmit()">
-      <!-- Marca -->
       <label for="marca">Marca Volquete:</label>
-      <input
-        id="marca"
-        formControlName="marca"
-        required
-        placeholder="Ej: Hitachi"
-      />
+      <input id="marca" formControlName="marca" required placeholder="Ej: Hitachi" />
 
-      <!-- Fecha Fabricacion -->
       <label for="fecha_fabricacion">Fecha Fabricación:</label>
-      <input
-        id="fecha_fabricacion"
-        formControlName="fecha_fabricacion"
-        required
-        type="date"
-      />
+      <input id="fecha_fabricacion" formControlName="fecha_fabricacion" required type="date" />
 
-      <!-- Fecha Compra -->
       <label for="fecha_compra">Fecha Compra:</label>
-      <input
-        id="fecha_compra"
-        formControlName="fecha_compra"
-        required
-        type="date"
-      />
+      <input id="fecha_compra" formControlName="fecha_compra" required type="date" />
 
-      <!-- Tipo Volquete -->
       <label for="tipoVolquete">Tipo de Volquete:</label>
       <select id="tipoVolquete" formControlName="tipoVolquete" required>
         <option value="" disabled selected>Seleccione un Tipo de Volquete</option>
@@ -89,9 +69,10 @@
         </option>
       </select>
 
-      <!-- Botones -->
-      <button type="submit">{{ isAddingNew ? 'Agregar' : 'Guardar' }}</button>
-      <button type="button" (click)="cancelEdit()">Cancelar</button>
+      <div class="modal-buttons">
+        <button type="submit" class="submit-btn">{{ isAddingNew ? 'Agregar' : 'Guardar' }}</button>
+        <button type="button" class="cancel-btn" (click)="cancelEdit()">Cancelar</button>
+      </div>
     </form>
   </div>
 </div>
