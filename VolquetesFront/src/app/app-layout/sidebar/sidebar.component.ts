@@ -110,14 +110,15 @@ export class SidebarComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-    //Me suscribo a los cambios de Auth
     this.authSubscription = this.authService.authenticatedUserRole$.subscribe(
       (rol) => {
-        this.tipoUsuario = rol;
+        if (rol) {
+          this.tipoUsuario = rol;
+        } else {
+          console.warn('No se obtuvo un rol válido');
+        }
       }
     );
-    // this.tipoUsuario = localStorage.getItem('rol')
-
   }
 
   ngOnDestroy(): void {

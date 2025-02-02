@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+
 
 @Injectable({
   providedIn: 'root',
@@ -45,7 +46,7 @@ export class AuthService {
     */
 
   public setUser(nombreUsuario: string, token: string) {
-    
+
     localStorage.setItem('nombre_usuario', nombreUsuario);
     localStorage.setItem('token', token);
     this.authenticatedUser.next(nombreUsuario);
@@ -97,30 +98,56 @@ export class AuthService {
 
 
     if (token && nombreUsuario) {
-      // en realidad acá hay que ir al backend por un checktoken
       this.authenticatedUser.next(nombreUsuario);
-      this.authStatus.next(true); //de nuevo, emitimos el nombre del usuario arriba y aca true.
+      this.authStatus.next(true);
 
-      this.obtenerRolUsuario(nombreUsuario).subscribe({
-        error: (error) => {
-          console.error('Error al obtener el rol al cargar usuario', error);
-          this.authenticatedUserRole.next(null);
-        }
-      });
+      if (rol) {
+        this.authenticatedUserRole.next(rol);
+      } else {
+        this.obtenerRolUsuario(nombreUsuario).subscribe({
+          error: (error) => {
+            console.error('Error al obtener el rol al cargar usuario', error);
+            this.authenticatedUserRole.next(null);
+          }
+        });
+      }
     } else {
       this.authStatus.next(false);
     }
   }
 
-  public obtenerRolUsuario(nombreUsuario: string): Observable<{ rol: string }> {
-    return this.http.get<{ rol: string }>(`/api/users/rol/${nombreUsuario}`).pipe(
+  public obtenerRolUsuario(nombreUsuario: string): Observable<{ rol: any }> {
+    console.log('Llamando a obtenerRolUsuario con:', nombreUsuario);
+    return this.http.get<{ rol: any }>(`/api/users/rol/${nombreUsuario}`).pipe(
       tap(response => {
-        // Cuando obtenemos el rol, lo guardamos en el servicio y en localStorage
-        if (response.rol) {
-          this.authenticatedUserRole.next(response.rol);
-          localStorage.setItem('rol', response.rol);
+        console.log('Respuesta del backend:', response);
+
+        let rolUsuario: string | null = null;
+
+        // Mapeo de IDs de rol a nombres
+        const rolesMap: { [key: number]: string } = {
+          1: 'admin',
+          2: 'user',
+          3: 'moderate'
+        };
+
+        if (response.rol && typeof response.rol === 'object' && 'id' in response.rol) {
+          rolUsuario = rolesMap[response.rol.id] || 'unknown'; // Default si no encuentra el rol
+        } else if (typeof response.rol === 'string') {
+          rolUsuario = response.rol;
+        }
+
+        if (rolUsuario && rolUsuario !== 'unknown') {
+          console.log('Rol asignado:', rolUsuario);
+          this.authenticatedUserRole.next(rolUsuario);
+          localStorage.setItem('rol', rolUsuario);
+        } else {
+          console.warn('El backend devolvió un rol desconocido');
         }
       })
     );
   }
+
+
+
 }
