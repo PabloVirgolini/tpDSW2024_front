@@ -90,8 +90,8 @@ export class ListaVolquetesComponent {
       fecha_compra: ['', Validators.required],
       tipoVolquete: [0, Validators.required],
     });
-    this.volquetesFiltrados = [...this.volquetes];
-
+   // this.volquetesFiltrados = [...this.volquetes];
+   this.volquetesFiltrados = this.volquetes;
   }
 
   loadTipoVolquetes(): void {
@@ -112,6 +112,7 @@ export class ListaVolquetesComponent {
         (data) => {
           console.log('Data received:', data);
           this.volquetes = Object.values(data) || [];
+          this.volquetesFiltrados = [...this.volquetes];
         },
         (error) => {
           console.error('Error al cargar los volquetes', error);
@@ -299,9 +300,10 @@ export class ListaVolquetesComponent {
 
 
   filtrarPorTipo(): void {
+    console.log('Valor del filtroTipoVolquete:', this.filtroTipoVolquete);
     if (this.filtroTipoVolquete === '') {
       // Si el filtro está vacío, restauramos todos los volquetes
-      this.volquetesFiltrados = [...this.volquetes];
+      this.volquetesFiltrados = this.volquetes;
       console.log("Volquetes filtrados (todos):", this.volquetesFiltrados);
     } else {
       // Aseguramos que el filtro sea un número
@@ -330,6 +332,9 @@ export class ListaVolquetesComponent {
 
 
 
+  ngOnChanges() {
+    this.filtrarPorTipo();
+  }
 
 
 
