@@ -3,12 +3,13 @@ export interface Usuario {
   nombre_usuario: string;
   password: string;
   email: string;
-  rol: string;
+  rol: { id: number, descripcion: string };
 }
-export class UsuarioModel implements Usuario {
-  id: number = 0;
-  nombre_usuario: string = '';
-  password: string = '';
-  email: string ='';
-  rol: string='';
+export interface UsuarioModel {
+  id: number;
+  nombre_usuario: string;
+  password: string;
+  email: string;
+  rol: { id: number, descripcion: string }; // Cambiar rol a un objeto con id y descripcion
 }
+

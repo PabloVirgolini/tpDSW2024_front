@@ -36,7 +36,7 @@ export class UsuariosComponent {
     nombre_usuario: '',
     password: '',
     email: '',
-    rol: '',
+    rol: { id: 0 , descripcion: '' }
   };
 
   isAddingNew: boolean = false;
@@ -49,23 +49,35 @@ export class UsuariosComponent {
     private usuariosService: UsuariosService
   ) {}
 
-  listadoRoles: string[] = [];
+  listadoRoles: { id: number, descripcion: string }[] = [];
 
   ngOnInit(): void {
     console.log('ngOnInit called');
     this.loadUsuarios();
-    this.usuariosService.getAllPossibleRoles().subscribe((roles)=>{
+
+    this.usuariosService.getAllPossibleRoles().subscribe((roles) => {
       console.log('Roles recibidos:', roles);
-      this.listadoRoles = roles;
+
+      // Transforma el arreglo de cadenas a objetos con { id, descripcion }
+      this.listadoRoles = roles.map((rol, index) => ({
+        id: index + 1,   // Puedes asignar un id único, o ajustarlo según corresponda
+        descripcion: rol // La cadena de rol será la descripcion
+      }));
     });
   }
+
 
   loadUsuarios(): void {
     this.subscription.add(
       this.usuariosService.usuario$.subscribe(
         (data) => {
           console.log('Data received:', data);
-          this.usuarios = Object.values(data);
+          // Verifica si data es un array
+          if (Array.isArray(data)) {
+            this.usuarios = data; // Asigna directamente si es un arreglo
+          } else {
+            console.error('Data no es un arreglo:', data);
+          }
         },
         (error) => {
           console.error('Error al cargar los usuarios', error);
@@ -73,6 +85,7 @@ export class UsuariosComponent {
       )
     );
   }
+
 
   onSeleccionarTipo(usuario: UsuarioModel): void {
     this.usuariosBodyService.select(
@@ -118,20 +131,38 @@ export class UsuariosComponent {
       nombre_usuario: '',
       password: '',
       email: '',
-      rol: '',
+      rol: { id: 0 , descripcion: '' }
     };
     this.isAddingNew = true;
   }
 
   addUsuario(usuario: UsuarioModel): void {
+    // Asegúrate de que el rol sea un objeto con 'id' y 'descripcion', no una cadena.
+    const rolSeleccionado = this.listadoRoles.find(rol => rol.descripcion === usuario.rol.descripcion);
+
+    // Si el rol no se encuentra, mostrar un mensaje o realizar una acción adecuada
+    if (rolSeleccionado) {
+      usuario.rol = rolSeleccionado; // Establece el rol como un objeto con 'id' y 'descripcion'
+    } else {
+      console.error('Rol no encontrado');
+      return; // Salir si no se encontró el rol
+    }
+
     this.subscription.add(
       this.usuariosService.add(usuario).subscribe({
-        next: () => this.loadUsuarios(),
-        error: (error) => console.error('Error al agregar usuario', error),
+        next: () => {
+          this.loadUsuarios(); // Recargar usuarios después de agregar
+        },
+        error: (error) => {
+          console.error('Error al agregar usuario', error); // Manejo de errores
+        },
       })
     );
-    this.cancelEdit();
+
+    this.cancelEdit(); // Salir del modo de edición después de agregar el usuario
   }
+
+
 
   updateUsuario(usuario: UsuarioModel): void {
     this.subscription.add(

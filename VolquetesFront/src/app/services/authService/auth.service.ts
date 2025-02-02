@@ -128,7 +128,7 @@ export class AuthService {
         const rolesMap: { [key: number]: string } = {
           1: 'admin',
           2: 'user',
-          3: 'moderate'
+          3: 'moderator'
         };
 
         if (response.rol && typeof response.rol === 'object' && 'id' in response.rol) {

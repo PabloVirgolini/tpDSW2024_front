@@ -83,7 +83,7 @@
           name="rol"
           required
         >
-        <option *ngFor="let rol of listadoRoles" [value]="rol">{{ rol }}</option>
+        <option *ngFor="let rol of listadoRoles" [ngValue]="rol">{{ rol.descripcion }}</option>
         </select>
 
         <!-- Botones -->
