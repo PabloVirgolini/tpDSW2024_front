@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AuthService {
   private authStatus = new BehaviorSubject<boolean>(false);
+  // Ver si conviene usar un BehaviorSubject. Para mi el que siempre necesite un valor, incluso desde el principio, es un problema.
   authStatus$ = this.authStatus.asObservable();
 
   private authenticatedUser = new BehaviorSubject<string | null>(null);
