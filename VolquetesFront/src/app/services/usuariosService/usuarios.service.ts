@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, catchError, of, tap, map } from 'rxjs';
+import { Observable, BehaviorSubject, catchError, of, tap, map, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Usuario, UsuarioModel } from '../../model/interfaces/usuario.interface.js';
 import { environment } from '../../../environments/environment.js';
@@ -107,7 +107,7 @@ export class UsuariosService {
     });
   }
 
-  login(data: any) {
+  login(data: { nombre_usuario: string; password: string }) {
     return this.http
       .post(`${this.apiUrl}/login`, data, {
         headers: new HttpHeaders().set('Content-Type', 'application/json'),
@@ -120,7 +120,12 @@ export class UsuariosService {
             this.authService.setUser(response.nombre_usuario, response.token);
           }
         }),
-        catchError(this.handleError<any>('login'))
+        catchError((error)=>{
+          //(this.handleError<any>('login'))
+          console.error("Error de login:", error);
+          return throwError(()=> error);
+        })
+          
       );
   }
 

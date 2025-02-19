@@ -61,11 +61,13 @@ export class LoginComponent implements OnInit {
     this.ngxService.start();
 
     var formData = this.loginForm.value;
+
     var data = {
       nombre_usuario: formData.nombreUsuario,
       password: formData.password,
     };
 
+    
     //Primero definimos el Observer completo y después nos suscribimos.
     const observer: Observer<any> = {
       next: (response) => {
@@ -77,10 +79,10 @@ export class LoginComponent implements OnInit {
         this.authService.setUser(response.usuario.nombre_usuario, response.token);
         
         this.router.navigate(['/']);
-        this.reloadPage();
+        this.reloadPage();  // Probar a ver si realmente hace falta. Comentarlo
       },
       error: (error) => {
-        console.error('Error en login', error);
+        //console.error('Error en login', error);
         this.ngxService.stop();
         this.responseMessage =
           error.error?.message || GlobalConstants.genericError;
@@ -92,6 +94,7 @@ export class LoginComponent implements OnInit {
       complete: () => console.log('Login request completed'),
     };
 
+    console.log('Intentando hacer login...');
     // Finalmente se llama al método LOGIN del servicio USUARIOSSERVICE para
     // enviar la solicitud de incio de sesión con los datos del formulario.
     this.userService.login(data).subscribe(observer);
